@@ -1,0 +1,44 @@
+services:
+  firebird:
+    image: firebirdsql/firebird:5.0.3
+    container_name: firebird
+    environment:
+      - FIREBIRD_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+      - FIREBIRD_DATABASE=${DATABASE_NAME}
+      - FIREBIRD_DATABASE_DEFAULT_CHARSET=UTF8
+    ports:
+      - "3050:3050"
+    volumes:
+      - ./data:/var/lib/firebird/data
+      - firebird_data:/firebird/data
+
+
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:26.0.2
+    container_name: cloudbeaver
+    ports:
+      - "8978:8978"
+    depends_on:
+      - firebird
+    volumes:
+      - cloudbeaver_data:/opt/cloudbeaver/workspace
+
+  # app:
+  #   build: .
+  #   container_name: app
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - firebird
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:firebirdsql://firebird:3050//var/lib/firebird/data/${DATABASE_NAME}
+  #     SPRING_DATASOURCE_USERNAME: ${DATABASE_USER}
+  #     SPRING_DATASOURCE_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+  #   stdin_open: true
+  #   tty: true
+
+volumes:
+  firebird_data:
+  cloudbeaver_data:
