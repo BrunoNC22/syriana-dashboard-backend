@@ -101,6 +101,7 @@ public class DashboardRepository {
         return this.jdbc.query(
             """
             SELECT 
+                FIRST 10
                 i.NOMEPRODUTO,
                 SUM(i.VALORTOTAL) AS faturamento
             FROM ITENSPEDIDO i
