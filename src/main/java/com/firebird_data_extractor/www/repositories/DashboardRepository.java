@@ -119,7 +119,13 @@ public class DashboardRepository {
         Map<Integer, FaturamentoPorHoraDTO> faturamentos = new HashMap<>();
 
         for (int hora = 0; hora < 24; hora++) {
-            faturamentos.put(hora, new FaturamentoPorHoraDTO(hora, 0.0));
+            faturamentos.put(
+                hora,
+                new FaturamentoPorHoraDTO(
+                    String.format("%02d:00", hora),
+                    0.0
+                )
+            );
         }
 
         this.jdbc.query(
@@ -147,7 +153,13 @@ public class DashboardRepository {
                 Double media = rs.getDouble("media_faturamento");
                 if (rs.wasNull()) media = 0.0;
 
-                faturamentos.put(hora, new FaturamentoPorHoraDTO(hora, media));
+                faturamentos.put(
+                    hora,
+                    new FaturamentoPorHoraDTO(
+                        String.format("%02d:00", hora),
+                        media
+                    )
+                );
             }
         );
 
