@@ -1,7 +1,8 @@
 package com.firebird_data_extractor.www.repositories;
 
 import java.sql.Date;
-import java.util.Collections;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -24,30 +25,75 @@ public class DashboardRepository {
         this.jdbc = jdbc;
     }
 
-    public Double getTotalVendido() {
+    private LocalDateTime getDataInicio(int ano, Integer mes) {
+        if (mes != null) {
+            return LocalDate.of(ano, mes, 1).atStartOfDay();
+        }
+
+        return LocalDate.of(ano, 1, 1).atStartOfDay();
+    }
+
+    private LocalDateTime getDataFim(int ano, Integer mes) {
+        if (mes != null) {
+            return LocalDate.of(ano, mes, 1)
+                .plusMonths(1)
+                .atStartOfDay();
+        }
+
+        return LocalDate.of(ano, 1, 1)
+            .plusYears(1)
+            .atStartOfDay();
+    }
+
+    public Double getTotalVendido(int ano, Integer mes) {
+
+        LocalDateTime inicio = getDataInicio(ano, mes);
+        LocalDateTime fim = getDataFim(ano, mes);
+
         Double result = this.jdbc.queryForObject(
             """
             SELECT SUM(VALORTOTAL)
             FROM PEDIDOS
-            WHERE DATADELETE IS NULL
+            WHERE 
+                DATADELETE IS NULL
+                AND DATAABERTURA >= ?
+                AND DATAABERTURA < ?
             """,
-            Double.class
+            Double.class,
+            inicio,
+            fim
         );
 
         return result != null ? result : 0.0;
     }
 
-    public int getQuantidadeDePedidos() {
-        return this.jdbc.queryForObject("""
+    public int getQuantidadeDePedidos(int ano, Integer mes) {
+
+        LocalDateTime inicio = getDataInicio(ano, mes);
+        LocalDateTime fim = getDataFim(ano, mes);
+
+        Integer result = this.jdbc.queryForObject(
+            """
             SELECT COUNT(*)
             FROM PEDIDOS
-            WHERE DATADELETE IS NULL;
+            WHERE 
+                DATADELETE IS NULL
+                AND DATAABERTURA >= ?
+                AND DATAABERTURA < ?
             """,
-            Integer.class
+            Integer.class,
+            inicio,
+            fim
         );
+
+        return result != null ? result : 0;
     }
 
-    public List<ProdutoMaisVendidoDTO> getProdutosMaisVendidos() {
+    public List<ProdutoMaisVendidoDTO> getProdutosMaisVendidos(int ano, Integer mes) {
+
+        LocalDateTime inicio = getDataInicio(ano, mes);
+        LocalDateTime fim = getDataFim(ano, mes);
+
         return this.jdbc.query(
             """
             SELECT
@@ -55,49 +101,109 @@ public class DashboardRepository {
                 i.NOMEPRODUTO,
                 SUM(i.QUANTIDADE) AS total_vendido
             FROM ITENSPEDIDO i
-            WHERE i.DATADELETE IS NULL
+            WHERE
+                i.DATADELETE IS NULL
+                AND i.DATAHORACADASTRO >= ?
+                AND i.DATAHORACADASTRO < ?
             GROUP BY i.NOMEPRODUTO
             ORDER BY total_vendido DESC
             """,
             (rs, rowNum) -> new ProdutoMaisVendidoDTO(
                 rs.getString("NOMEPRODUTO"),
                 rs.getDouble("total_vendido")
-            )
+            ),
+            inicio,
+            fim
         );
     }
 
-    public List<FaturamentoPorDiaDTO> getFaturamentoPorDia() {
-        var faturamentosPorDia =  this.jdbc.query(
+    public List<FaturamentoPorDiaDTO> getFaturamentoPorDia(int ano, Integer mes) {
+
+        Map<LocalDate, FaturamentoPorDiaDTO> faturamentos = new HashMap<>();
+
+        LocalDate inicioPeriodo;
+        LocalDate fimPeriodo;
+
+        if (mes != null) {
+            inicioPeriodo = LocalDate.of(ano, mes, 1);
+            fimPeriodo = inicioPeriodo.withDayOfMonth(
+                inicioPeriodo.lengthOfMonth()
+            );
+        } else {
+            inicioPeriodo = LocalDate.of(ano, 1, 1);
+            fimPeriodo = LocalDate.of(ano, 12, 31);
+        }
+
+        for (
+            LocalDate data = inicioPeriodo;
+            !data.isAfter(fimPeriodo);
+            data = data.plusDays(1)
+        ) {
+
+            faturamentos.put(
+                data,
+                new FaturamentoPorDiaDTO(
+                    data,
+                    0.0
+                )
+            );
+        }
+
+        LocalDateTime inicio = getDataInicio(ano, mes);
+        LocalDateTime fim = getDataFim(ano, mes);
+
+        this.jdbc.query(
             """
             SELECT 
-                FIRST 30
                 CAST(DATAABERTURA AS DATE) AS dia,
                 SUM(VALORTOTAL) AS faturamento
             FROM PEDIDOS
-            WHERE DATADELETE IS NULL
+            WHERE
+                DATADELETE IS NULL
+                AND DATAABERTURA >= ?
+                AND DATAABERTURA < ?
             GROUP BY dia
-            ORDER BY dia DESC
             """,
-            (rs, rowNum) -> {
+            rs -> {
+
                 Date data = rs.getDate("dia");
 
-                Double faturamento = rs.getDouble("faturamento");
-                if (rs.wasNull()) faturamento = 0.0;
+                LocalDate dia = data.toLocalDate();
 
-                return new FaturamentoPorDiaDTO(
-                    data.toLocalDate(),
-                    faturamento
+                Double faturamento = rs.getDouble("faturamento");
+
+                if (rs.wasNull()) {
+                    faturamento = 0.0;
+                }
+
+                faturamentos.put(
+                    dia,
+                    new FaturamentoPorDiaDTO(
+                        dia,
+                        faturamento
+                    )
                 );
-            }
+            },
+            inicio,
+            fim
         );
 
-        Collections.reverse(faturamentosPorDia);
-
-        return faturamentosPorDia;
+        return faturamentos.values()
+            .stream()
+            .sorted(
+                Comparator.comparing(FaturamentoPorDiaDTO::dia)
+            )
+            .toList();
     }
-    
 
-    public List<FaturamentoPorProduto> getFaturamentoPorProduto() {
+    public List<FaturamentoPorProduto> getFaturamentoPorProduto(
+        int ano,
+        Integer mes
+    ) {
+
+        LocalDateTime inicio = getDataInicio(ano, mes);
+        LocalDateTime fim = getDataFim(ano, mes);
+
         return this.jdbc.query(
             """
             SELECT 
@@ -105,20 +211,33 @@ public class DashboardRepository {
                 i.NOMEPRODUTO,
                 SUM(i.VALORTOTAL) AS faturamento
             FROM ITENSPEDIDO i
-            WHERE i.DATADELETE is NULL
+            WHERE
+                i.DATADELETE IS NULL
+                AND i.DATAHORACADASTRO >= ?
+                AND i.DATAHORACADASTRO < ?
             GROUP BY i.NOMEPRODUTO
-            ORDER BY faturamento DESC;
+            ORDER BY faturamento DESC
             """,
-            (rs, rowNum) -> {
-                return new FaturamentoPorProduto(rs.getString("NOMEPRODUTO"), rs.getDouble("faturamento"));
-            }
+            (rs, rowNum) -> new FaturamentoPorProduto(
+                rs.getString("NOMEPRODUTO"),
+                rs.getDouble("faturamento")
+            ),
+            inicio,
+            fim
         );
     }
 
-    public List<FaturamentoPorHoraDTO> getMediaFaturamentoPorHoraPorDiaSemana(int diaSemana) {
-        Map<Integer, FaturamentoPorHoraDTO> faturamentos = new HashMap<>();
+    public List<FaturamentoPorHoraDTO> getMediaFaturamentoPorHoraPorDiaSemana(
+        int diaSemana,
+        int ano,
+        Integer mes
+    ) {
+
+        Map<Integer, FaturamentoPorHoraDTO> faturamentos =
+            new HashMap<>();
 
         for (int hora = 0; hora < 24; hora++) {
+
             faturamentos.put(
                 hora,
                 new FaturamentoPorHoraDTO(
@@ -127,6 +246,9 @@ public class DashboardRepository {
                 )
             );
         }
+
+        LocalDateTime inicio = getDataInicio(ano, mes);
+        LocalDateTime fim = getDataFim(ano, mes);
 
         this.jdbc.query(
             """
@@ -142,16 +264,23 @@ public class DashboardRepository {
                 WHERE 
                     DATADELETE IS NULL
                     AND EXTRACT(WEEKDAY FROM DATAABERTURA) = ?
+                    AND DATAABERTURA >= ?
+                    AND DATAABERTURA < ?
                 GROUP BY dia, hora
             ) sub
             GROUP BY hora
             """,
-            new Object[]{diaSemana},
             rs -> {
+
                 int hora = rs.getInt("hora");
 
-                Double media = rs.getDouble("media_faturamento");
-                if (rs.wasNull()) media = 0.0;
+                Double media = rs.getDouble(
+                    "media_faturamento"
+                );
+
+                if (rs.wasNull()) {
+                    media = 0.0;
+                }
 
                 faturamentos.put(
                     hora,
@@ -160,11 +289,19 @@ public class DashboardRepository {
                         media
                     )
                 );
-            }
+            },
+            diaSemana,
+            inicio,
+            fim
         );
 
-        return faturamentos.values().stream()
-            .sorted(Comparator.comparing(FaturamentoPorHoraDTO::hora))
+        return faturamentos.values()
+            .stream()
+            .sorted(
+                Comparator.comparing(
+                    FaturamentoPorHoraDTO::hora
+                )
+            )
             .toList();
     }
 }
