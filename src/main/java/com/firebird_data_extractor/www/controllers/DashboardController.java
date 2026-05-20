@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorHoraDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorProduto;
+import com.firebird_data_extractor.www.dto.InsumoQueMaisCustouDTO;
 import com.firebird_data_extractor.www.dto.ProdutoMaisVendidoDTO;
 import com.firebird_data_extractor.www.repositories.DashboardRepository;
 
@@ -163,5 +164,26 @@ public class DashboardController {
                 ano,
                 mes
             );
+    }
+
+    @GetMapping("/total-gasto-ingredientes")
+    public Double getTotalGastoIngredientes(
+        @RequestParam int ano,
+        @RequestParam(required = false) Integer mes
+    ) {
+        return repository.getTotalGastoIngredientes(
+            ano,
+            mes
+        );
+    }
+
+    @GetMapping("/insumos-que-mais-custaram")
+    public List<InsumoQueMaisCustouDTO> getInsumosQueMaisCustaram(
+        @RequestParam int ano,
+        @RequestParam(required = false) Integer mes
+    ) {
+        validarAnoEMes(ano, mes);
+
+        return this.repository.getInsumosQueMaisCustaram(ano, mes);
     }
 }
