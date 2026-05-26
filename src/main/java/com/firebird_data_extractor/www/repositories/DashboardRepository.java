@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorHoraDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorProduto;
+import com.firebird_data_extractor.www.dto.InsumoQueMaisCustouDTO;
 import com.firebird_data_extractor.www.dto.ProdutoMaisVendidoDTO;
 
 @Repository
@@ -303,5 +304,77 @@ public class DashboardRepository {
                 )
             )
             .toList();
+    }
+
+    public Double getTotalGastoIngredientes(
+        int ano,
+        Integer mes
+    ) {
+
+        LocalDateTime inicio = getDataInicio(ano, mes);
+        LocalDateTime fim = getDataFim(ano, mes);
+
+        Double result = this.jdbc.queryForObject(
+            """
+            SELECT
+                SUM(
+                    ABS(QTD * VALORUNITARIO)
+                ) AS total_gasto
+            FROM ESTOQUEMOVIMENTACAO
+            WHERE
+                DATADELETE IS NULL
+                AND TIPO = 'S'
+                AND DATAINSERT >= ?
+                AND DATAINSERT < ?
+            """,
+            Double.class,
+            inicio,
+            fim
+        );
+
+        return result != null ? result : 0.0;
+    }
+
+    public List<InsumoQueMaisCustouDTO> getInsumosQueMaisCustaram(
+        int ano,
+        Integer mes
+    ) {
+        LocalDateTime inicio = getDataInicio(ano, mes);
+        LocalDateTime fim = getDataFim(ano, mes);
+
+        return this.jdbc.query(
+            """
+            SELECT 
+                first 10
+                pdt.CODIGO,
+                pdt.NOME,
+                abs(sum(em.QTD)) as quantidade,
+                u.SIGLA,
+                pd.PRECOCUSTO,
+                abs(SUM(em.QTD * pd.PRECOCUSTO)) AS valor_total
+            FROM ESTOQUEMOVIMENTACAO AS em
+            left join PRODUTODETALHE pd
+                on pd.CODIGO = em.CODIGOPRODUTODETALHE
+            left join PRODUTOS pdt
+                on pdt.CODIGO = pd.CODIGOPRODUTO
+            left join UNIDADECOMERCIALIZACAO u
+                on u.CODIGO = pdt.CODIGOUNIDADECOMERCIAL
+            where 
+                em.DATADELETE is null
+                and em.DATAINSERT >= ?
+                and em.DATAINSERT < ?
+            group by pdt.CODIGO, pdt.NOME, u.SIGLA, pd.PRECOCUSTO
+            order by VALOR_TOTAL desc
+            """,
+            (rs, rowNum) -> new InsumoQueMaisCustouDTO(
+                rs.getString("NOME"),
+                rs.getString("SIGLA"),
+                rs.getDouble("quantidade"),
+                rs.getDouble("PRECOCUSTO"),
+                rs.getDouble("valor_total")
+            ),
+            inicio,
+            fim
+        );
     }
 }
