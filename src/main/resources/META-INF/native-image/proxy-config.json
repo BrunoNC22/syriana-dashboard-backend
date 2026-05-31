@@ -12,15 +12,9 @@
     "interfaces":["java.lang.reflect.WildcardType","org.springframework.core.SerializableTypeWrapper$SerializableTypeProxy","java.io.Serializable"]
   },
   {
-    "interfaces":["java.sql.Connection"]
-  },
-  {
     "interfaces":["org.springframework.boot.context.properties.ConfigurationProperties"]
   },
   {
     "interfaces":["org.springframework.web.bind.annotation.RequestMapping"]
-  },
-  {
-    "interfaces":["org.springframework.web.bind.annotation.RequestParam"]
   }
 ]

@@ -3,17 +3,11 @@
   "includes":[{
     "pattern":"\\QMETA-INF/build-info.properties\\E"
   }, {
-    "pattern":"\\QMETA-INF/resources/error/500.html\\E"
-  }, {
-    "pattern":"\\QMETA-INF/resources/error/5xx.html\\E"
-  }, {
     "pattern":"\\QMETA-INF/resources/index.html\\E"
   }, {
     "pattern":"\\QMETA-INF/services/ch.qos.logback.classic.spi.Configurator\\E"
   }, {
     "pattern":"\\QMETA-INF/services/java.lang.System$LoggerFinder\\E"
-  }, {
-    "pattern":"\\QMETA-INF/services/java.net.spi.InetAddressResolverProvider\\E"
   }, {
     "pattern":"\\QMETA-INF/services/java.net.spi.URLStreamHandlerProvider\\E"
   }, {
@@ -27,13 +21,7 @@
   }, {
     "pattern":"\\QMETA-INF/services/org.apache.juli.logging.Log\\E"
   }, {
-    "pattern":"\\QMETA-INF/services/org.firebirdsql.encodings.EncodingSet\\E"
-  }, {
     "pattern":"\\QMETA-INF/services/org.firebirdsql.gds.impl.GDSFactoryPlugin\\E"
-  }, {
-    "pattern":"\\QMETA-INF/services/org.firebirdsql.gds.ng.wire.ProtocolDescriptor\\E"
-  }, {
-    "pattern":"\\QMETA-INF/services/org.firebirdsql.gds.ng.wire.auth.AuthenticationPluginSpi\\E"
   }, {
     "pattern":"\\QMETA-INF/services/org.firebirdsql.jaybird.props.spi.ConnectionPropertyDefinerSpi\\E"
   }, {
@@ -72,6 +60,10 @@
     "pattern":"\\Qcom/firebird_data_extractor/www/\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/config/CorsConfig.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/config/DatabaseConfig$ServerConfig.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/config/DatabaseConfig.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/DashboardController.class\\E"
   }, {
@@ -521,17 +513,7 @@
   }, {
     "pattern":"\\Qorg/springframework/web/servlet/config/annotation/WebMvcConfigurer.class\\E"
   }, {
-    "pattern":"\\Qorg/springframework/web/util/HtmlCharacterEntityReferences.properties\\E"
-  }, {
-    "pattern":"\\Qpublic/error/500.html\\E"
-  }, {
-    "pattern":"\\Qpublic/error/5xx.html\\E"
-  }, {
     "pattern":"\\Qpublic/index.html\\E"
-  }, {
-    "pattern":"\\Qresources/error/500.html\\E"
-  }, {
-    "pattern":"\\Qresources/error/5xx.html\\E"
   }, {
     "pattern":"\\Qresources/index.html\\E"
   }, {
@@ -541,23 +523,13 @@
   }, {
     "pattern":"\\Qspring.properties\\E"
   }, {
-    "pattern":"\\Qstatic/error/500.html\\E"
-  }, {
-    "pattern":"\\Qstatic/error/5xx.html\\E"
-  }, {
     "pattern":"\\Qstatic/index.html\\E"
   }]},
   "bundles":[{
-    "name":"jakarta.servlet.LocalStrings",
-    "locales":[""]
-  }, {
     "name":"jakarta.servlet.http.LocalStrings",
     "locales":[""]
   }, {
     "name":"org.apache.catalina.authenticator.LocalStrings",
-    "locales":[""]
-  }, {
-    "name":"org.apache.catalina.authenticator.jaspic.LocalStrings",
     "locales":[""]
   }, {
     "name":"org.apache.catalina.connector.LocalStrings",
@@ -605,9 +577,6 @@
     "name":"org.apache.coyote.http11.LocalStrings",
     "locales":[""]
   }, {
-    "name":"org.apache.coyote.http11.filters.LocalStrings",
-    "locales":[""]
-  }, {
     "name":"org.apache.naming.LocalStrings",
     "locales":[""]
   }, {
@@ -645,9 +614,6 @@
     "locales":[""]
   }, {
     "name":"org.apache.tomcat.websocket.server.LocalStrings",
-    "locales":[""]
-  }, {
-    "name":"org.firebirdsql.jaybird.version",
     "locales":[""]
   }]
 }
