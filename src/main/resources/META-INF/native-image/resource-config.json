@@ -3,11 +3,19 @@
   "includes":[{
     "pattern":"\\QMETA-INF/build-info.properties\\E"
   }, {
+    "pattern":"\\QMETA-INF/resources/error/500.html\\E"
+  }, {
+    "pattern":"\\QMETA-INF/resources/error/5xx.html\\E"
+  }, {
+    "pattern":"\\QMETA-INF/resources/favicon.ico\\E"
+  }, {
     "pattern":"\\QMETA-INF/resources/index.html\\E"
   }, {
     "pattern":"\\QMETA-INF/services/ch.qos.logback.classic.spi.Configurator\\E"
   }, {
     "pattern":"\\QMETA-INF/services/java.lang.System$LoggerFinder\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.net.spi.InetAddressResolverProvider\\E"
   }, {
     "pattern":"\\QMETA-INF/services/java.net.spi.URLStreamHandlerProvider\\E"
   }, {
@@ -21,7 +29,13 @@
   }, {
     "pattern":"\\QMETA-INF/services/org.apache.juli.logging.Log\\E"
   }, {
+    "pattern":"\\QMETA-INF/services/org.firebirdsql.encodings.EncodingSet\\E"
+  }, {
     "pattern":"\\QMETA-INF/services/org.firebirdsql.gds.impl.GDSFactoryPlugin\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org.firebirdsql.gds.ng.wire.ProtocolDescriptor\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org.firebirdsql.gds.ng.wire.auth.AuthenticationPluginSpi\\E"
   }, {
     "pattern":"\\QMETA-INF/services/org.firebirdsql.jaybird.props.spi.ConnectionPropertyDefinerSpi\\E"
   }, {
@@ -461,6 +475,8 @@
   }, {
     "pattern":"\\Qorg/springframework/boot/sql/init/dependency/DatabaseInitializationDependencyConfigurer.class\\E"
   }, {
+    "pattern":"\\Qorg/springframework/boot/web/server/mime-mappings.properties\\E"
+  }, {
     "pattern":"\\Qorg/springframework/context/ApplicationContextAware.class\\E"
   }, {
     "pattern":"\\Qorg/springframework/context/ResourceLoaderAware.class\\E"
@@ -513,7 +529,21 @@
   }, {
     "pattern":"\\Qorg/springframework/web/servlet/config/annotation/WebMvcConfigurer.class\\E"
   }, {
+    "pattern":"\\Qorg/springframework/web/util/HtmlCharacterEntityReferences.properties\\E"
+  }, {
+    "pattern":"\\Qpublic/error/500.html\\E"
+  }, {
+    "pattern":"\\Qpublic/error/5xx.html\\E"
+  }, {
+    "pattern":"\\Qpublic/favicon.ico\\E"
+  }, {
     "pattern":"\\Qpublic/index.html\\E"
+  }, {
+    "pattern":"\\Qresources/error/500.html\\E"
+  }, {
+    "pattern":"\\Qresources/error/5xx.html\\E"
+  }, {
+    "pattern":"\\Qresources/favicon.ico\\E"
   }, {
     "pattern":"\\Qresources/index.html\\E"
   }, {
@@ -523,97 +553,115 @@
   }, {
     "pattern":"\\Qspring.properties\\E"
   }, {
+    "pattern":"\\Qstatic/error/500.html\\E"
+  }, {
+    "pattern":"\\Qstatic/error/5xx.html\\E"
+  }, {
+    "pattern":"\\Qstatic/favicon.ico\\E"
+  }, {
     "pattern":"\\Qstatic/index.html\\E"
   }]},
   "bundles":[{
-    "name":"jakarta.servlet.http.LocalStrings",
+    "name":"jakarta.servlet.LocalStrings",
     "locales":[""]
   }, {
+    "name":"jakarta.servlet.http.LocalStrings",
+    "locales":["", "und"]
+  }, {
     "name":"org.apache.catalina.authenticator.LocalStrings",
+    "locales":["", "und"]
+  }, {
+    "name":"org.apache.catalina.authenticator.jaspic.LocalStrings",
     "locales":[""]
   }, {
     "name":"org.apache.catalina.connector.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.core.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.deploy.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.loader.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.mapper.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.mbeans.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.realm.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.security.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.session.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.startup.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.util.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.valves.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.catalina.webresources.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.coyote.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.coyote.http11.LocalStrings",
+    "locales":["", "und"]
+  }, {
+    "name":"org.apache.coyote.http11.filters.LocalStrings",
     "locales":[""]
   }, {
     "name":"org.apache.naming.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.buf.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.compat.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.descriptor.web.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.http.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.http.parser.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.modeler.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.net.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.scan.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.util.threads.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.websocket.LocalStrings",
-    "locales":[""]
+    "locales":["", "und"]
   }, {
     "name":"org.apache.tomcat.websocket.server.LocalStrings",
+    "locales":["", "und"]
+  }, {
+    "name":"org.firebirdsql.jaybird.version",
     "locales":[""]
   }]
 }
