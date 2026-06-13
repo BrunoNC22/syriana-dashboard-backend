@@ -94,3 +94,4 @@ docker-compose.override.yml
 # Outros
 # =========================
 *.orig
+server-config.json
