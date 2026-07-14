@@ -99,6 +99,7 @@ public class DashboardRepository {
             """
             SELECT
                 FIRST 10
+                i.CODIGOPRODUTO,
                 i.NOMEPRODUTO,
                 SUM(i.QUANTIDADE) AS total_vendido
             FROM ITENSPEDIDO i
@@ -106,10 +107,11 @@ public class DashboardRepository {
                 i.DATADELETE IS NULL
                 AND i.DATAHORACADASTRO >= ?
                 AND i.DATAHORACADASTRO < ?
-            GROUP BY i.NOMEPRODUTO
+            GROUP BY  i.CODIGOPRODUTO, i.NOMEPRODUTO
             ORDER BY total_vendido DESC
             """,
             (rs, rowNum) -> new ProdutoMaisVendidoDTO(
+                rs.getString("CODIGOPRODUTO"),
                 rs.getString("NOMEPRODUTO"),
                 rs.getDouble("total_vendido")
             ),
