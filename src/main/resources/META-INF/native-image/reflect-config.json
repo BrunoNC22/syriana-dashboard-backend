@@ -256,11 +256,25 @@
   "methods":[{"name":"nome","parameterTypes":[] }, {"name":"precoPorUnidadeDeMedida","parameterTypes":[] }, {"name":"quantidade","parameterTypes":[] }, {"name":"siglaUnidadeDeMedida","parameterTypes":[] }, {"name":"valorTotal","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.InsumoDoProdutoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"custoTotal","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeTotal","parameterTypes":[] }, {"name":"siglaUnidadeDeMedida","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutoDetalhesDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"custoTotal","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"insumos","parameterTypes":[] }, {"name":"lucro","parameterTypes":[] }, {"name":"margemLucro","parameterTypes":[] }, {"name":"nomeProduto","parameterTypes":[] }, {"name":"quantidadeVendida","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.ProdutoMaisVendidoDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"nomeProduto","parameterTypes":[] }, {"name":"totalVendido","parameterTypes":[] }]
+  "methods":[{"name":"id","parameterTypes":[] }, {"name":"nomeProduto","parameterTypes":[] }, {"name":"totalVendido","parameterTypes":[] }]
 },
 {
   "name":"com.firebird_data_extractor.www.repositories.DashboardRepository",

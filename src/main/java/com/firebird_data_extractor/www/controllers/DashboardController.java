@@ -12,6 +12,7 @@ import com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorHoraDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorProduto;
 import com.firebird_data_extractor.www.dto.InsumoQueMaisCustouDTO;
+import com.firebird_data_extractor.www.dto.ProdutoDetalhesDTO;
 import com.firebird_data_extractor.www.dto.ProdutoMaisVendidoDTO;
 import com.firebird_data_extractor.www.repositories.DashboardRepository;
 
@@ -175,6 +176,16 @@ public class DashboardController {
             ano,
             mes
         );
+    }
+
+    @GetMapping("/produto-detalhes")
+    public ProdutoDetalhesDTO getProdutoDetalhes(
+        @RequestParam Integer id,
+        @RequestParam int ano,
+        @RequestParam(required = false) Integer mes
+    ) {
+        validarAnoEMes(ano, mes);
+        return this.repository.getProdutoDetalhes(id, ano, mes);
     }
 
     @GetMapping("/insumos-que-mais-custaram")

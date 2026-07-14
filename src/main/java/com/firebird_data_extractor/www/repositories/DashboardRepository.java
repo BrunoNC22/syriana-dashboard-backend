@@ -15,6 +15,8 @@ import com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorHoraDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorProduto;
 import com.firebird_data_extractor.www.dto.InsumoQueMaisCustouDTO;
+import com.firebird_data_extractor.www.dto.InsumoDoProdutoDTO;
+import com.firebird_data_extractor.www.dto.ProdutoDetalhesDTO;
 import com.firebird_data_extractor.www.dto.ProdutoMaisVendidoDTO;
 
 @Repository
@@ -99,20 +101,20 @@ public class DashboardRepository {
             """
             SELECT
                 FIRST 10
-                i.CODIGOPRODUTO,
-                i.NOMEPRODUTO,
+                i.CODIGOPRODUTODETALHE,
+                MIN(i.NOMEPRODUTO) AS nomeproduto,
                 SUM(i.QUANTIDADE) AS total_vendido
             FROM ITENSPEDIDO i
             WHERE
                 i.DATADELETE IS NULL
                 AND i.DATAHORACADASTRO >= ?
                 AND i.DATAHORACADASTRO < ?
-            GROUP BY  i.CODIGOPRODUTO, i.NOMEPRODUTO
+            GROUP BY i.CODIGOPRODUTODETALHE
             ORDER BY total_vendido DESC
             """,
             (rs, rowNum) -> new ProdutoMaisVendidoDTO(
-                rs.getString("CODIGOPRODUTO"),
-                rs.getString("NOMEPRODUTO"),
+                String.valueOf(rs.getInt("CODIGOPRODUTODETALHE")),
+                rs.getString("nomeproduto"),
                 rs.getDouble("total_vendido")
             ),
             inicio,
@@ -335,6 +337,91 @@ public class DashboardRepository {
         );
 
         return result != null ? result : 0.0;
+    }
+
+    public ProdutoDetalhesDTO getProdutoDetalhes(
+        Integer idProdutoDetalhe,
+        int ano,
+        Integer mes
+    ) {
+        LocalDateTime inicio = getDataInicio(ano, mes);
+        LocalDateTime fim = getDataFim(ano, mes);
+
+        record SalesStats(String nomeProduto, Double quantidadeVendida, Double faturamento) {}
+
+        SalesStats stats = this.jdbc.queryForObject(
+            """
+            SELECT
+                MIN(i.NOMEPRODUTO) AS nomeproduto,
+                SUM(i.QUANTIDADE) AS qtd_vendida,
+                SUM(i.VALORUNITARIO * i.QUANTIDADE) AS faturamento_total
+            FROM ITENSPEDIDO i
+            WHERE
+                i.DATADELETE IS NULL
+                AND i.CODIGOPRODUTODETALHE = ?
+                AND i.DATAHORACADASTRO >= ?
+                AND i.DATAHORACADASTRO < ?
+            """,
+            (rs, _) -> new SalesStats(
+                rs.getString("nomeproduto"),
+                rs.getDouble("qtd_vendida"),
+                rs.getDouble("faturamento_total")
+            ),
+            idProdutoDetalhe, inicio, fim
+        );
+
+        List<InsumoDoProdutoDTO> insumos = this.jdbc.query(
+            """
+            SELECT
+                pdt.NOME AS nome_insumo,
+                u.SIGLA AS sigla_unidade,
+                ABS(SUM(em.QTD)) AS qtd_total,
+                ABS(SUM(em.QTD * pd.PRECOCUSTO)) AS custo_total
+            FROM ITENSPEDIDO i
+            JOIN ESTOQUEMOVIMENTACAO em ON em.CODIGOITEMPEDIDO = i.CODIGO
+            JOIN PRODUTODETALHE pd ON pd.CODIGO = em.CODIGOPRODUTODETALHE
+            JOIN PRODUTOS pdt ON pdt.CODIGO = pd.CODIGOPRODUTO
+            LEFT JOIN UNIDADECOMERCIALIZACAO u ON u.CODIGO = pdt.CODIGOUNIDADECOMERCIAL
+            WHERE
+                i.DATADELETE IS NULL
+                AND i.CODIGOPRODUTODETALHE = ?
+                AND i.DATAHORACADASTRO >= ?
+                AND i.DATAHORACADASTRO < ?
+                AND em.DATADELETE IS NULL
+                AND em.TIPO = 'S'
+            GROUP BY pdt.CODIGO, pdt.NOME, u.SIGLA
+            ORDER BY custo_total DESC
+            """,
+            (rs, rowNum) -> new InsumoDoProdutoDTO(
+                rs.getString("nome_insumo"),
+                rs.getString("sigla_unidade"),
+                rs.getDouble("qtd_total"),
+                rs.getDouble("custo_total")
+            ),
+            idProdutoDetalhe, inicio, fim
+        );
+
+        double quantidadeVendida = stats != null && stats.quantidadeVendida() != null
+            ? stats.quantidadeVendida() : 0.0;
+        double faturamento = stats != null && stats.faturamento() != null
+            ? stats.faturamento() : 0.0;
+        String nomeProduto = stats != null ? stats.nomeProduto() : null;
+
+        double custoTotal = insumos.stream()
+            .mapToDouble(InsumoDoProdutoDTO::custoTotal)
+            .sum();
+        double lucro = faturamento - custoTotal;
+        double margemLucro = faturamento > 0 ? (lucro / faturamento) * 100.0 : 0.0;
+
+        return new ProdutoDetalhesDTO(
+            nomeProduto,
+            quantidadeVendida,
+            faturamento,
+            custoTotal,
+            lucro,
+            margemLucro,
+            insumos
+        );
     }
 
     public List<InsumoQueMaisCustouDTO> getInsumosQueMaisCustaram(
