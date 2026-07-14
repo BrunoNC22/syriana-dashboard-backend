@@ -28,30 +28,10 @@ public class DashboardRepository {
         this.jdbc = jdbc;
     }
 
-    private LocalDateTime getDataInicio(int ano, Integer mes) {
-        if (mes != null) {
-            return LocalDate.of(ano, mes, 1).atStartOfDay();
-        }
+    public Double getTotalVendido(LocalDate dataInicio, LocalDate dataFim) {
 
-        return LocalDate.of(ano, 1, 1).atStartOfDay();
-    }
-
-    private LocalDateTime getDataFim(int ano, Integer mes) {
-        if (mes != null) {
-            return LocalDate.of(ano, mes, 1)
-                .plusMonths(1)
-                .atStartOfDay();
-        }
-
-        return LocalDate.of(ano, 1, 1)
-            .plusYears(1)
-            .atStartOfDay();
-    }
-
-    public Double getTotalVendido(int ano, Integer mes) {
-
-        LocalDateTime inicio = getDataInicio(ano, mes);
-        LocalDateTime fim = getDataFim(ano, mes);
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         Double result = this.jdbc.queryForObject(
             """
@@ -70,10 +50,10 @@ public class DashboardRepository {
         return result != null ? result : 0.0;
     }
 
-    public int getQuantidadeDePedidos(int ano, Integer mes) {
+    public int getQuantidadeDePedidos(LocalDate dataInicio, LocalDate dataFim) {
 
-        LocalDateTime inicio = getDataInicio(ano, mes);
-        LocalDateTime fim = getDataFim(ano, mes);
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         Integer result = this.jdbc.queryForObject(
             """
@@ -92,10 +72,10 @@ public class DashboardRepository {
         return result != null ? result : 0;
     }
 
-    public List<ProdutoMaisVendidoDTO> getProdutosMaisVendidos(int ano, Integer mes) {
+    public List<ProdutoMaisVendidoDTO> getProdutosMaisVendidos(LocalDate dataInicio, LocalDate dataFim) {
 
-        LocalDateTime inicio = getDataInicio(ano, mes);
-        LocalDateTime fim = getDataFim(ano, mes);
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         return this.jdbc.query(
             """
@@ -122,26 +102,13 @@ public class DashboardRepository {
         );
     }
 
-    public List<FaturamentoPorDiaDTO> getFaturamentoPorDia(int ano, Integer mes) {
+    public List<FaturamentoPorDiaDTO> getFaturamentoPorDia(LocalDate dataInicio, LocalDate dataFim) {
 
         Map<LocalDate, FaturamentoPorDiaDTO> faturamentos = new HashMap<>();
 
-        LocalDate inicioPeriodo;
-        LocalDate fimPeriodo;
-
-        if (mes != null) {
-            inicioPeriodo = LocalDate.of(ano, mes, 1);
-            fimPeriodo = inicioPeriodo.withDayOfMonth(
-                inicioPeriodo.lengthOfMonth()
-            );
-        } else {
-            inicioPeriodo = LocalDate.of(ano, 1, 1);
-            fimPeriodo = LocalDate.of(ano, 12, 31);
-        }
-
         for (
-            LocalDate data = inicioPeriodo;
-            !data.isAfter(fimPeriodo);
+            LocalDate data = dataInicio;
+            !data.isAfter(dataFim);
             data = data.plusDays(1)
         ) {
 
@@ -154,8 +121,8 @@ public class DashboardRepository {
             );
         }
 
-        LocalDateTime inicio = getDataInicio(ano, mes);
-        LocalDateTime fim = getDataFim(ano, mes);
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         this.jdbc.query(
             """
@@ -202,12 +169,12 @@ public class DashboardRepository {
     }
 
     public List<FaturamentoPorProduto> getFaturamentoPorProduto(
-        int ano,
-        Integer mes
+        LocalDate dataInicio,
+        LocalDate dataFim
     ) {
 
-        LocalDateTime inicio = getDataInicio(ano, mes);
-        LocalDateTime fim = getDataFim(ano, mes);
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         return this.jdbc.query(
             """
@@ -234,8 +201,8 @@ public class DashboardRepository {
 
     public List<FaturamentoPorHoraDTO> getMediaFaturamentoPorHoraPorDiaSemana(
         int diaSemana,
-        int ano,
-        Integer mes
+        LocalDate dataInicio,
+        LocalDate dataFim
     ) {
 
         Map<Integer, FaturamentoPorHoraDTO> faturamentos =
@@ -252,8 +219,8 @@ public class DashboardRepository {
             );
         }
 
-        LocalDateTime inicio = getDataInicio(ano, mes);
-        LocalDateTime fim = getDataFim(ano, mes);
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         this.jdbc.query(
             """
@@ -311,12 +278,12 @@ public class DashboardRepository {
     }
 
     public Double getTotalGastoIngredientes(
-        int ano,
-        Integer mes
+        LocalDate dataInicio,
+        LocalDate dataFim
     ) {
 
-        LocalDateTime inicio = getDataInicio(ano, mes);
-        LocalDateTime fim = getDataFim(ano, mes);
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         Double result = this.jdbc.queryForObject(
             """
@@ -341,11 +308,11 @@ public class DashboardRepository {
 
     public ProdutoDetalhesDTO getProdutoDetalhes(
         Integer idProdutoDetalhe,
-        int ano,
-        Integer mes
+        LocalDate dataInicio,
+        LocalDate dataFim
     ) {
-        LocalDateTime inicio = getDataInicio(ano, mes);
-        LocalDateTime fim = getDataFim(ano, mes);
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         record SalesStats(String nomeProduto, Double quantidadeVendida, Double faturamento) {}
 
@@ -362,7 +329,7 @@ public class DashboardRepository {
                 AND i.DATAHORACADASTRO >= ?
                 AND i.DATAHORACADASTRO < ?
             """,
-            (rs, _) -> new SalesStats(
+            (rs, rowNum) -> new SalesStats(
                 rs.getString("nomeproduto"),
                 rs.getDouble("qtd_vendida"),
                 rs.getDouble("faturamento_total")
@@ -425,11 +392,11 @@ public class DashboardRepository {
     }
 
     public List<InsumoQueMaisCustouDTO> getInsumosQueMaisCustaram(
-        int ano,
-        Integer mes
+        LocalDate dataInicio,
+        LocalDate dataFim
     ) {
-        LocalDateTime inicio = getDataInicio(ano, mes);
-        LocalDateTime fim = getDataFim(ano, mes);
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         return this.jdbc.query(
             """

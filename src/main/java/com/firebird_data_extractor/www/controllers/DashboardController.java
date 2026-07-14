@@ -3,6 +3,7 @@ package com.firebird_data_extractor.www.controllers;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,114 +27,113 @@ public class DashboardController {
         this.repository = repo;
     }
 
-    private void validarAnoEMes(int ano, Integer mes) {
+    private void validarIntervalo(LocalDate dataInicio, LocalDate dataFim) {
 
-        int anoAtual = LocalDate.now().getYear();
-
-        if (ano < 2000 || ano > anoAtual + 1) {
+        if (dataInicio == null || dataFim == null) {
 
             throw new IllegalArgumentException(
                 """
-                Ano inválido.
+                Intervalo inválido.
 
-                O parâmetro 'ano' deve estar entre 2000 e %d.
+                Os parâmetros 'dataInicio' e 'dataFim' são obrigatórios
+                e devem estar no formato ISO (yyyy-MM-dd).
 
-                Exemplos corretos:
-                /dashboard/total-vendido?ano=2025
-                /dashboard/total-vendido?ano=2025&mes=5
+                Exemplo correto:
+                /dashboard/total-vendido?dataInicio=2025-05-01&dataFim=2025-05-31
                 """
-                .formatted(anoAtual + 1)
             );
         }
 
-        if (mes != null && (mes < 1 || mes > 12)) {
+        if (dataInicio.isAfter(dataFim)) {
 
             throw new IllegalArgumentException(
                 """
-                Mês inválido.
+                Intervalo inválido.
 
-                O parâmetro 'mes' deve estar entre 1 e 12.
+                'dataInicio' não pode ser posterior a 'dataFim'.
 
-                Exemplos corretos:
-                /dashboard/total-vendido?ano=2025&mes=5
-                /dashboard/faturamento-por-dia?ano=2024&mes=12
+                Exemplo correto:
+                /dashboard/total-vendido?dataInicio=2025-05-01&dataFim=2025-05-31
                 """
+            );
+        }
+
+        LocalDate limiteInferior = LocalDate.of(2000, 1, 1);
+        LocalDate limiteSuperior = LocalDate.now().plusYears(1);
+
+        if (dataInicio.isBefore(limiteInferior) || dataFim.isAfter(limiteSuperior)) {
+
+            throw new IllegalArgumentException(
+                """
+                Intervalo fora do limite permitido.
+
+                As datas devem estar entre %s e %s.
+                """
+                .formatted(limiteInferior, limiteSuperior)
             );
         }
     }
 
     @GetMapping("/total-vendido")
     public double getTotalVendido(
-        @RequestParam int ano,
-        @RequestParam(required = false) Integer mes
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
     ) {
 
-        validarAnoEMes(ano, mes);
+        validarIntervalo(dataInicio, dataFim);
 
-        return this.repository.getTotalVendido(ano, mes);
+        return this.repository.getTotalVendido(dataInicio, dataFim);
     }
 
     @GetMapping("/quantidade-de-pedidos")
     public int quantidadeDePedidos(
-        @RequestParam int ano,
-        @RequestParam(required = false) Integer mes
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
     ) {
 
-        validarAnoEMes(ano, mes);
+        validarIntervalo(dataInicio, dataFim);
 
-        return this.repository.getQuantidadeDePedidos(
-            ano,
-            mes
-        );
+        return this.repository.getQuantidadeDePedidos(dataInicio, dataFim);
     }
 
     @GetMapping("/produtos-mais-vendidos")
     public List<ProdutoMaisVendidoDTO> getProdutosMaisVendidos(
-        @RequestParam int ano,
-        @RequestParam(required = false) Integer mes
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
     ) {
 
-        validarAnoEMes(ano, mes);
+        validarIntervalo(dataInicio, dataFim);
 
-        return this.repository.getProdutosMaisVendidos(
-            ano,
-            mes
-        );
+        return this.repository.getProdutosMaisVendidos(dataInicio, dataFim);
     }
 
     @GetMapping("/faturamento-por-dia")
     public List<FaturamentoPorDiaDTO> getFaturamentoPorDia(
-        @RequestParam int ano,
-        @RequestParam(required = false) Integer mes
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
     ) {
 
-        validarAnoEMes(ano, mes);
+        validarIntervalo(dataInicio, dataFim);
 
-        return this.repository.getFaturamentoPorDia(
-            ano,
-            mes
-        );
+        return this.repository.getFaturamentoPorDia(dataInicio, dataFim);
     }
 
     @GetMapping("/faturamento-por-produto")
     public List<FaturamentoPorProduto> getFaturamentoPorProduto(
-        @RequestParam int ano,
-        @RequestParam(required = false) Integer mes
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
     ) {
 
-        validarAnoEMes(ano, mes);
+        validarIntervalo(dataInicio, dataFim);
 
-        return this.repository.getFaturamentoPorProduto(
-            ano,
-            mes
-        );
+        return this.repository.getFaturamentoPorProduto(dataInicio, dataFim);
     }
 
     @GetMapping("/horario-de-pico")
     public List<FaturamentoPorHoraDTO> getHorarioDePico(
         @RequestParam int diaSemana,
-        @RequestParam int ano,
-        @RequestParam(required = false) Integer mes
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
     ) {
 
         if (diaSemana < 0 || diaSemana > 6) {
@@ -152,49 +152,50 @@ public class DashboardController {
                 6 = sábado
 
                 Exemplo correto:
-                /dashboard/horario-de-pico?diaSemana=1&ano=2025&mes=5
+                /dashboard/horario-de-pico?diaSemana=1&dataInicio=2025-05-01&dataFim=2025-05-31
                 """
             );
         }
 
-        validarAnoEMes(ano, mes);
+        validarIntervalo(dataInicio, dataFim);
 
         return this.repository
             .getMediaFaturamentoPorHoraPorDiaSemana(
                 diaSemana,
-                ano,
-                mes
+                dataInicio,
+                dataFim
             );
     }
 
     @GetMapping("/total-gasto-ingredientes")
     public Double getTotalGastoIngredientes(
-        @RequestParam int ano,
-        @RequestParam(required = false) Integer mes
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
     ) {
-        return repository.getTotalGastoIngredientes(
-            ano,
-            mes
-        );
+
+        validarIntervalo(dataInicio, dataFim);
+
+        return this.repository.getTotalGastoIngredientes(dataInicio, dataFim);
     }
 
     @GetMapping("/produto-detalhes")
     public ProdutoDetalhesDTO getProdutoDetalhes(
         @RequestParam Integer id,
-        @RequestParam int ano,
-        @RequestParam(required = false) Integer mes
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
     ) {
-        validarAnoEMes(ano, mes);
-        return this.repository.getProdutoDetalhes(id, ano, mes);
+        validarIntervalo(dataInicio, dataFim);
+
+        return this.repository.getProdutoDetalhes(id, dataInicio, dataFim);
     }
 
     @GetMapping("/insumos-que-mais-custaram")
     public List<InsumoQueMaisCustouDTO> getInsumosQueMaisCustaram(
-        @RequestParam int ano,
-        @RequestParam(required = false) Integer mes
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
     ) {
-        validarAnoEMes(ano, mes);
+        validarIntervalo(dataInicio, dataFim);
 
-        return this.repository.getInsumosQueMaisCustaram(ano, mes);
+        return this.repository.getInsumosQueMaisCustaram(dataInicio, dataFim);
     }
 }
