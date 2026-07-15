@@ -81,9 +81,15 @@
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/DashboardController.class\\E"
   }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/controllers/GarconsController.class\\E"
+  }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/MetadataController.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/DashboardRepository.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/GarcomRepository$GarcomAcumulador.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/GarcomRepository.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/MetadataRepository.class\\E"
   }, {

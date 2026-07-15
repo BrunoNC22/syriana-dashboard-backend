@@ -13,6 +13,7 @@ import com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorHoraDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorProduto;
 import com.firebird_data_extractor.www.dto.InsumoQueMaisCustouDTO;
+import com.firebird_data_extractor.www.dto.InsumoDetalhesDTO;
 import com.firebird_data_extractor.www.dto.ProdutoDetalhesDTO;
 import com.firebird_data_extractor.www.dto.ProdutoMaisVendidoDTO;
 import com.firebird_data_extractor.www.repositories.DashboardRepository;
@@ -197,5 +198,16 @@ public class DashboardController {
         validarIntervalo(dataInicio, dataFim);
 
         return this.repository.getInsumosQueMaisCustaram(dataInicio, dataFim);
+    }
+
+    @GetMapping("/insumo-detalhes")
+    public InsumoDetalhesDTO getInsumoDetalhes(
+        @RequestParam Integer id,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
+    ) {
+        validarIntervalo(dataInicio, dataFim);
+
+        return this.repository.getInsumoDetalhes(id, dataInicio, dataFim);
     }
 }

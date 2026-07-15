@@ -16,8 +16,10 @@ import com.firebird_data_extractor.www.dto.FaturamentoPorHoraDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorProduto;
 import com.firebird_data_extractor.www.dto.InsumoQueMaisCustouDTO;
 import com.firebird_data_extractor.www.dto.InsumoDoProdutoDTO;
+import com.firebird_data_extractor.www.dto.InsumoDetalhesDTO;
 import com.firebird_data_extractor.www.dto.ProdutoDetalhesDTO;
 import com.firebird_data_extractor.www.dto.ProdutoMaisVendidoDTO;
+import com.firebird_data_extractor.www.dto.ProdutoQueUsaInsumoDTO;
 
 @Repository
 public class DashboardRepository {
@@ -178,20 +180,22 @@ public class DashboardRepository {
 
         return this.jdbc.query(
             """
-            SELECT 
+            SELECT
                 FIRST 10
-                i.NOMEPRODUTO,
+                i.CODIGOPRODUTODETALHE,
+                MIN(i.NOMEPRODUTO) AS nomeproduto,
                 SUM(i.VALORTOTAL) AS faturamento
             FROM ITENSPEDIDO i
             WHERE
                 i.DATADELETE IS NULL
                 AND i.DATAHORACADASTRO >= ?
                 AND i.DATAHORACADASTRO < ?
-            GROUP BY i.NOMEPRODUTO
+            GROUP BY i.CODIGOPRODUTODETALHE
             ORDER BY faturamento DESC
             """,
             (rs, rowNum) -> new FaturamentoPorProduto(
-                rs.getString("NOMEPRODUTO"),
+                String.valueOf(rs.getInt("CODIGOPRODUTODETALHE")),
+                rs.getString("nomeproduto"),
                 rs.getDouble("faturamento")
             ),
             inicio,
@@ -400,7 +404,7 @@ public class DashboardRepository {
 
         return this.jdbc.query(
             """
-            SELECT 
+            SELECT
                 first 10
                 pdt.CODIGO,
                 pdt.NOME,
@@ -415,7 +419,7 @@ public class DashboardRepository {
                 on pdt.CODIGO = pd.CODIGOPRODUTO
             left join UNIDADECOMERCIALIZACAO u
                 on u.CODIGO = pdt.CODIGOUNIDADECOMERCIAL
-            where 
+            where
                 em.DATADELETE is null
                 and em.DATAINSERT >= ?
                 and em.DATAINSERT < ?
@@ -423,6 +427,7 @@ public class DashboardRepository {
             order by VALOR_TOTAL desc
             """,
             (rs, rowNum) -> new InsumoQueMaisCustouDTO(
+                String.valueOf(rs.getInt("CODIGO")),
                 rs.getString("NOME"),
                 rs.getString("SIGLA"),
                 rs.getDouble("quantidade"),
@@ -431,6 +436,103 @@ public class DashboardRepository {
             ),
             inicio,
             fim
+        );
+    }
+
+    public InsumoDetalhesDTO getInsumoDetalhes(
+        Integer idInsumo,
+        LocalDate dataInicio,
+        LocalDate dataFim
+    ) {
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
+
+        record InsumoStats(
+            String nome,
+            String sigla,
+            Double quantidadeTotal,
+            Double custoTotal,
+            Integer movimentacoes
+        ) {}
+
+        InsumoStats stats = this.jdbc.queryForObject(
+            """
+            SELECT
+                MIN(pdt.NOME) AS nome,
+                MIN(u.SIGLA) AS sigla,
+                ABS(SUM(em.QTD)) AS qtd_total,
+                ABS(SUM(em.QTD * pd.PRECOCUSTO)) AS custo_total,
+                COUNT(*) AS movimentacoes
+            FROM ESTOQUEMOVIMENTACAO em
+            JOIN PRODUTODETALHE pd ON pd.CODIGO = em.CODIGOPRODUTODETALHE
+            JOIN PRODUTOS pdt ON pdt.CODIGO = pd.CODIGOPRODUTO
+            LEFT JOIN UNIDADECOMERCIALIZACAO u ON u.CODIGO = pdt.CODIGOUNIDADECOMERCIAL
+            WHERE
+                em.DATADELETE IS NULL
+                AND em.TIPO = 'S'
+                AND pd.CODIGOPRODUTO = ?
+                AND em.DATAINSERT >= ?
+                AND em.DATAINSERT < ?
+            """,
+            (rs, rowNum) -> new InsumoStats(
+                rs.getString("nome"),
+                rs.getString("sigla"),
+                rs.getDouble("qtd_total"),
+                rs.getDouble("custo_total"),
+                rs.getInt("movimentacoes")
+            ),
+            idInsumo, inicio, fim
+        );
+
+        List<ProdutoQueUsaInsumoDTO> produtos = this.jdbc.query(
+            """
+            SELECT
+                FIRST 15
+                i.CODIGOPRODUTODETALHE,
+                MIN(i.NOMEPRODUTO) AS nome_produto,
+                ABS(SUM(em.QTD)) AS qtd_usada,
+                ABS(SUM(em.QTD * pd.PRECOCUSTO)) AS custo_total
+            FROM ESTOQUEMOVIMENTACAO em
+            JOIN PRODUTODETALHE pd ON pd.CODIGO = em.CODIGOPRODUTODETALHE
+            JOIN ITENSPEDIDO i ON i.CODIGO = em.CODIGOITEMPEDIDO
+            WHERE
+                em.DATADELETE IS NULL
+                AND em.TIPO = 'S'
+                AND pd.CODIGOPRODUTO = ?
+                AND em.DATAINSERT >= ?
+                AND em.DATAINSERT < ?
+                AND i.DATADELETE IS NULL
+            GROUP BY i.CODIGOPRODUTODETALHE
+            ORDER BY custo_total DESC
+            """,
+            (rs, rowNum) -> new ProdutoQueUsaInsumoDTO(
+                String.valueOf(rs.getInt("CODIGOPRODUTODETALHE")),
+                rs.getString("nome_produto"),
+                rs.getDouble("qtd_usada"),
+                rs.getDouble("custo_total")
+            ),
+            idInsumo, inicio, fim
+        );
+
+        String nome = stats != null ? stats.nome() : null;
+        String sigla = stats != null ? stats.sigla() : null;
+        double quantidadeTotal = stats != null && stats.quantidadeTotal() != null
+            ? stats.quantidadeTotal() : 0.0;
+        double custoTotal = stats != null && stats.custoTotal() != null
+            ? stats.custoTotal() : 0.0;
+        int movimentacoes = stats != null && stats.movimentacoes() != null
+            ? stats.movimentacoes() : 0;
+        double custoMedioPorUnidade = quantidadeTotal > 0 ? custoTotal / quantidadeTotal : 0.0;
+
+        return new InsumoDetalhesDTO(
+            nome,
+            sigla,
+            quantidadeTotal,
+            custoTotal,
+            custoMedioPorUnidade,
+            produtos.size(),
+            movimentacoes,
+            produtos
         );
     }
 }

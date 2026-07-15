@@ -12,14 +12,6 @@
     "serve-native-agent": {
       "executor": "nx:run-commands",
       "options": {
-        "command": ".\\mvnw.cmd spring-boot:run -Dspring-boot.run.jvmArguments=\"-agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image\"",
-        "cwd": "apps/backend"
-      }
-    },
-
-    "serve-jar-native-agent": {
-      "executor": "nx:run-commands",
-      "options": {
         "command": "java -agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image -jar target/www-0.0.1-SNAPSHOT.jar",
         "cwd": "apps/backend"
       }
