@@ -179,6 +179,17 @@ public class DashboardController {
         return this.repository.getTotalGastoIngredientes(dataInicio, dataFim);
     }
 
+    @GetMapping("/lucro-total")
+    public Double getLucroTotal(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
+    ) {
+
+        validarIntervalo(dataInicio, dataFim);
+
+        return this.repository.getLucroTotal(dataInicio, dataFim);
+    }
+
     @GetMapping("/produto-detalhes")
     public ProdutoDetalhesDTO getProdutoDetalhes(
         @RequestParam Integer id,

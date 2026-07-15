@@ -292,15 +292,15 @@ public class DashboardRepository {
         Double result = this.jdbc.queryForObject(
             """
             SELECT
-                SUM(
-                    ABS(QTD * VALORUNITARIO)
-                ) AS total_gasto
-            FROM ESTOQUEMOVIMENTACAO
+                ABS(SUM(em.QTD * pd.PRECOCUSTO)) AS total_gasto
+            FROM ESTOQUEMOVIMENTACAO em
+            JOIN PRODUTODETALHE pd
+                ON pd.CODIGO = em.CODIGOPRODUTODETALHE
             WHERE
-                DATADELETE IS NULL
-                AND TIPO = 'S'
-                AND DATAINSERT >= ?
-                AND DATAINSERT < ?
+                em.DATADELETE IS NULL
+                AND em.TIPO = 'S'
+                AND em.DATAINSERT >= ?
+                AND em.DATAINSERT < ?
             """,
             Double.class,
             inicio,
@@ -308,6 +308,14 @@ public class DashboardRepository {
         );
 
         return result != null ? result : 0.0;
+    }
+
+    public Double getLucroTotal(LocalDate dataInicio, LocalDate dataFim) {
+
+        Double faturamento = this.getTotalVendido(dataInicio, dataFim);
+        Double custoInsumos = this.getTotalGastoIngredientes(dataInicio, dataFim);
+
+        return faturamento - custoInsumos;
     }
 
     public ProdutoDetalhesDTO getProdutoDetalhes(
