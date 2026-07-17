@@ -214,6 +214,20 @@
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.lang.String","java.lang.String","java.lang.Integer"] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.controllers.AnalyticsController",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.services.AnalyticsService"] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.controllers.ApiExceptionHandler",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.controllers.DashboardController",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -240,6 +254,20 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.MetadataRepository"] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.controllers.ProdutosController",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ProdutoRepository"] }, {"name":"getCatalogo","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ErroValidacaoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"mensagem","parameterTypes":[] }]
 },
 {
   "name":"com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO",
@@ -277,6 +305,13 @@
   "methods":[{"name":"comandas","parameterTypes":[] }, {"name":"custo","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"itensLancados","parameterTypes":[] }, {"name":"lucro","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"totalTaxaServico","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.InsumoCapitalParadoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"custoEstoqueParado","parameterTypes":[] }, {"name":"estoqueAtual","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"ultimoUso","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.InsumoDetalhesDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -291,60 +326,11 @@
   "methods":[{"name":"custoTotal","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeTotal","parameterTypes":[] }, {"name":"siglaUnidadeDeMedida","parameterTypes":[] }]
 },
 {
-  "name":"com.firebird_data_extractor.www.dto.InsumoQueMaisCustouDTO",
+  "name":"com.firebird_data_extractor.www.dto.InsumoForaDoPadraoDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"precoPorUnidadeDeMedida","parameterTypes":[] }, {"name":"quantidade","parameterTypes":[] }, {"name":"siglaUnidadeDeMedida","parameterTypes":[] }, {"name":"valorTotal","parameterTypes":[] }]
-},
-{
-  "name":"com.firebird_data_extractor.www.dto.ProdutoDetalhesDTO",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"custoTotal","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"insumos","parameterTypes":[] }, {"name":"lucro","parameterTypes":[] }, {"name":"margemLucro","parameterTypes":[] }, {"name":"nomeProduto","parameterTypes":[] }, {"name":"quantidadeVendida","parameterTypes":[] }]
-},
-{
-  "name":"com.firebird_data_extractor.www.dto.ProdutosBaixoDesempenhoDTO",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"abandonados","parameterTypes":[] }, {"name":"maioresQuedas","parameterTypes":[] }, {"name":"semVendas","parameterTypes":[] }, {"name":"tendenciaQueda","parameterTypes":[] }]
-},
-{
-  "name":"com.firebird_data_extractor.www.dto.ProdutoSemVendaDTO",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"novo","parameterTypes":[] }, {"name":"ultimaVenda","parameterTypes":[] }]
-},
-{
-  "name":"com.firebird_data_extractor.www.dto.ProdutoQuedaDTO",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeAnterior","parameterTypes":[] }, {"name":"quantidadeAtual","parameterTypes":[] }, {"name":"variacaoPercentual","parameterTypes":[] }]
-},
-{
-  "name":"com.firebird_data_extractor.www.dto.ProdutoTendenciaQuedaDTO",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeTotal","parameterTypes":[] }, {"name":"semanas","parameterTypes":[] }, {"name":"slopePorSemana","parameterTypes":[] }]
-},
-{
-  "name":"com.firebird_data_extractor.www.dto.ProdutoAbandonadoDTO",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"mesesComVenda","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeUltimos6Meses","parameterTypes":[] }, {"name":"ultimaVenda","parameterTypes":[] }]
-},
-{
-  "name":"com.firebird_data_extractor.www.dto.InsumosBaixoUsoDTO",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"capitalParado","parameterTypes":[] }, {"name":"foraDoPadrao","parameterTypes":[] }, {"name":"poucoUtilizados","parameterTypes":[] }, {"name":"quedaConsumo","parameterTypes":[] }]
+  "methods":[{"name":"consumoUltimaSemana","parameterTypes":[] }, {"name":"desvioPadrao","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"mediaSemanal","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"zScore","parameterTypes":[] }]
 },
 {
   "name":"com.firebird_data_extractor.www.dto.InsumoPoucoUtilizadoDTO",
@@ -354,11 +340,11 @@
   "methods":[{"name":"custoConsumido","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"novo","parameterTypes":[] }, {"name":"quantidadeConsumida","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"ultimoUso","parameterTypes":[] }]
 },
 {
-  "name":"com.firebird_data_extractor.www.dto.InsumoCapitalParadoDTO",
+  "name":"com.firebird_data_extractor.www.dto.InsumoQueMaisCustouDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"custoEstoqueParado","parameterTypes":[] }, {"name":"estoqueAtual","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"ultimoUso","parameterTypes":[] }]
+  "methods":[{"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"precoPorUnidadeDeMedida","parameterTypes":[] }, {"name":"quantidade","parameterTypes":[] }, {"name":"siglaUnidadeDeMedida","parameterTypes":[] }, {"name":"valorTotal","parameterTypes":[] }]
 },
 {
   "name":"com.firebird_data_extractor.www.dto.InsumoQuedaConsumoDTO",
@@ -368,18 +354,18 @@
   "methods":[{"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeAnterior","parameterTypes":[] }, {"name":"quantidadeAtual","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"variacaoPercentual","parameterTypes":[] }]
 },
 {
-  "name":"com.firebird_data_extractor.www.dto.InsumoForaDoPadraoDTO",
+  "name":"com.firebird_data_extractor.www.dto.InsumosBaixoUsoDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"consumoUltimaSemana","parameterTypes":[] }, {"name":"desvioPadrao","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"mediaSemanal","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"zScore","parameterTypes":[] }]
+  "methods":[{"name":"capitalParado","parameterTypes":[] }, {"name":"foraDoPadrao","parameterTypes":[] }, {"name":"poucoUtilizados","parameterTypes":[] }, {"name":"quedaConsumo","parameterTypes":[] }]
 },
 {
-  "name":"com.firebird_data_extractor.www.dto.ErroValidacaoDTO",
+  "name":"com.firebird_data_extractor.www.dto.ProdutoAbandonadoDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"mensagem","parameterTypes":[] }]
+  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"mesesComVenda","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeUltimos6Meses","parameterTypes":[] }, {"name":"ultimaVenda","parameterTypes":[] }]
 },
 {
   "name":"com.firebird_data_extractor.www.dto.ProdutoCatalogoDTO",
@@ -387,6 +373,13 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"idProduto","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"tipo","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutoDetalhesDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"custoTotal","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"insumos","parameterTypes":[] }, {"name":"lucro","parameterTypes":[] }, {"name":"margemLucro","parameterTypes":[] }, {"name":"nomeProduto","parameterTypes":[] }, {"name":"quantidadeVendida","parameterTypes":[] }]
 },
 {
   "name":"com.firebird_data_extractor.www.dto.ProdutoMaisVendidoDTO",
@@ -403,11 +396,51 @@
   "methods":[{"name":"custoTotal","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nomeProduto","parameterTypes":[] }, {"name":"quantidadeUsada","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.ProdutoQuedaDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeAnterior","parameterTypes":[] }, {"name":"quantidadeAtual","parameterTypes":[] }, {"name":"variacaoPercentual","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.ProdutoRankingDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"nomeProduto","parameterTypes":[] }, {"name":"quantidade","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutoSemVendaDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"novo","parameterTypes":[] }, {"name":"ultimaVenda","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutoTendenciaQuedaDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeTotal","parameterTypes":[] }, {"name":"semanas","parameterTypes":[] }, {"name":"slopePorSemana","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutosBaixoDesempenhoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"abandonados","parameterTypes":[] }, {"name":"maioresQuedas","parameterTypes":[] }, {"name":"semVendas","parameterTypes":[] }, {"name":"tendenciaQueda","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.repositories.AnalyticsRepository",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.repositories.AnalyticsRepository$$SpringCGLIB$$0",
+  "fields":[{"name":"CGLIB$CALLBACK_FILTER"}, {"name":"CGLIB$FACTORY_DATA"}],
+  "methods":[{"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
 },
 {
   "name":"com.firebird_data_extractor.www.repositories.DashboardRepository",
@@ -444,6 +477,25 @@
   "name":"com.firebird_data_extractor.www.repositories.MetadataRepository$$SpringCGLIB$$0",
   "fields":[{"name":"CGLIB$CALLBACK_FILTER"}, {"name":"CGLIB$FACTORY_DATA"}],
   "methods":[{"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.repositories.ProdutoRepository",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }, {"name":"getCatalogo","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.repositories.ProdutoRepository$$SpringCGLIB$$0",
+  "fields":[{"name":"CGLIB$CALLBACK_FILTER"}, {"name":"CGLIB$FACTORY_DATA"}],
+  "methods":[{"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.services.AnalyticsService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.AnalyticsRepository"] }]
 },
 {
   "name":"com.github.benmanes.caffeine.cache.Caffeine"
@@ -3750,6 +3802,9 @@
   "name":"org.springframework.hateoas.server.mvc.TypeConstrainedMappingJackson2HttpMessageConverter"
 },
 {
+  "name":"org.springframework.http.HttpStatus"
+},
+{
   "name":"org.springframework.http.ReactiveHttpInputMessage"
 },
 {
@@ -3985,6 +4040,10 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"org.springframework.stereotype.Service",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.springframework.transaction.ConfigurableTransactionManager",
   "queryAllPublicMethods":true
 },
@@ -4135,6 +4194,10 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"org.springframework.web.bind.annotation.ControllerAdvice",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.springframework.web.bind.annotation.ExceptionHandler",
   "queryAllDeclaredMethods":true
 },
@@ -4167,7 +4230,15 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"org.springframework.web.bind.annotation.ResponseStatus",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.springframework.web.bind.annotation.RestController",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.web.bind.annotation.RestControllerAdvice",
   "queryAllDeclaredMethods":true
 },
 {

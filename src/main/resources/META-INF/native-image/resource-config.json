@@ -87,6 +87,10 @@
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/config/DatabaseConfig.class\\E"
   }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/controllers/AnalyticsController.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/controllers/ApiExceptionHandler.class\\E"
+  }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/DashboardController.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/DevShutdownController.class\\E"
@@ -95,6 +99,24 @@
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/MetadataController.class\\E"
   }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/controllers/ProdutosController.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$ConsumoAgregado.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$ConsumoDiario.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$InsumoUniverso.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$ProdutoUniverso.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$VendaAgregada.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$VendaDiaria.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$VendaMensal.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository.class\\E"
+  }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/DashboardRepository.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/GarcomRepository$GarcomAcumulador.class\\E"
@@ -102,6 +124,10 @@
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/GarcomRepository.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/MetadataRepository.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/ProdutoRepository.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/AnalyticsService.class\\E"
   }, {
     "pattern":"\\Qconfig/application-default.properties\\E"
   }, {
@@ -537,6 +563,8 @@
   }, {
     "pattern":"\\Qorg/springframework/transaction/annotation/TransactionManagementConfigurationSelector.class\\E"
   }, {
+    "pattern":"\\Qorg/springframework/web/bind/annotation/ControllerAdvice.class\\E"
+  }, {
     "pattern":"\\Qorg/springframework/web/bind/annotation/Mapping.class\\E"
   }, {
     "pattern":"\\Qorg/springframework/web/bind/annotation/RequestMapping.class\\E"
@@ -544,6 +572,8 @@
     "pattern":"\\Qorg/springframework/web/bind/annotation/ResponseBody.class\\E"
   }, {
     "pattern":"\\Qorg/springframework/web/bind/annotation/RestController.class\\E"
+  }, {
+    "pattern":"\\Qorg/springframework/web/bind/annotation/RestControllerAdvice.class\\E"
   }, {
     "pattern":"\\Qorg/springframework/web/context/ServletContextAware.class\\E"
   }, {
