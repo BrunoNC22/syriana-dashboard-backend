@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.firebird_data_extractor.www.dto.InsumosBaixoUsoDTO;
 import com.firebird_data_extractor.www.dto.ProdutosBaixoDesempenhoDTO;
 import com.firebird_data_extractor.www.services.AnalyticsService;
 
@@ -70,5 +71,15 @@ public class AnalyticsController {
         validarIntervalo(dataInicio, dataFim);
 
         return this.service.analisarProdutos(dataInicio, dataFim);
+    }
+
+    @GetMapping("/insumos-baixo-uso")
+    public InsumosBaixoUsoDTO getInsumosBaixoUso(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
+    ) {
+        validarIntervalo(dataInicio, dataFim);
+
+        return this.service.analisarInsumos(dataInicio, dataFim);
     }
 }

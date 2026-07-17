@@ -10,12 +10,20 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.firebird_data_extractor.www.dto.InsumoCapitalParadoDTO;
+import com.firebird_data_extractor.www.dto.InsumoForaDoPadraoDTO;
+import com.firebird_data_extractor.www.dto.InsumoPoucoUtilizadoDTO;
+import com.firebird_data_extractor.www.dto.InsumoQuedaConsumoDTO;
+import com.firebird_data_extractor.www.dto.InsumosBaixoUsoDTO;
 import com.firebird_data_extractor.www.dto.ProdutoAbandonadoDTO;
 import com.firebird_data_extractor.www.dto.ProdutoQuedaDTO;
 import com.firebird_data_extractor.www.dto.ProdutoSemVendaDTO;
 import com.firebird_data_extractor.www.dto.ProdutoTendenciaQuedaDTO;
 import com.firebird_data_extractor.www.dto.ProdutosBaixoDesempenhoDTO;
 import com.firebird_data_extractor.www.repositories.AnalyticsRepository;
+import com.firebird_data_extractor.www.repositories.AnalyticsRepository.ConsumoAgregado;
+import com.firebird_data_extractor.www.repositories.AnalyticsRepository.ConsumoDiario;
+import com.firebird_data_extractor.www.repositories.AnalyticsRepository.InsumoUniverso;
 import com.firebird_data_extractor.www.repositories.AnalyticsRepository.ProdutoUniverso;
 import com.firebird_data_extractor.www.repositories.AnalyticsRepository.VendaAgregada;
 import com.firebird_data_extractor.www.repositories.AnalyticsRepository.VendaDiaria;
@@ -55,6 +63,22 @@ public class AnalyticsService {
 
     /** Tamanho máximo de cada lista retornada (as mais críticas no topo). */
     private static final int LIMITE_LISTA = 50;
+
+    /**
+     * Piso de consumo, em R$, no período anterior para um insumo entrar na lista
+     * de queda de consumo. Em R$ (não em quantidade) porque insumos têm unidades
+     * heterogêneas (kg, L, un) — o custo é a régua comparável entre eles.
+     */
+    private static final double PISO_CUSTO_INSUMO = 50.0;
+
+    /** Janela de referência (semanas) para o z-score do consumo de insumo. */
+    private static final int ZSCORE_JANELA_SEMANAS = 12;
+
+    /** Nº mínimo de semanas com consumo na janela para o z-score ter sentido. */
+    private static final int ZSCORE_MIN_SEMANAS_COM_CONSUMO = 3;
+
+    /** |z| a partir do qual a última semana é considerada "fora do padrão". */
+    private static final double ZSCORE_LIMITE = 2.0;
 
     private final AnalyticsRepository repository;
 
@@ -292,5 +316,216 @@ public class AnalyticsService {
             return 0.0;
         }
         return (n * somaXY - somaX * somaY) / denominador;
+    }
+
+    // ==================================================================
+    // Insumos de baixo uso (espelho do produto, sobre ESTOQUEMOVIMENTACAO 'S').
+    // ==================================================================
+
+    public InsumosBaixoUsoDTO analisarInsumos(
+        LocalDate dataInicio,
+        LocalDate dataFim
+    ) {
+        LocalDate hoje = LocalDate.now();
+
+        // Período anterior de mesma duração (comparação "período anterior").
+        long dias = ChronoUnit.DAYS.between(dataInicio, dataFim) + 1;
+        LocalDate inicioAnterior = dataInicio.minusDays(dias);
+        LocalDate fimAnterior = dataInicio.minusDays(1);
+
+        List<InsumoUniverso> universo = repository.getCatalogoInsumoAtivo();
+
+        Map<String, ConsumoAgregado> agregados = new HashMap<>();
+        for (ConsumoAgregado c : repository.getAgregadoConsumoPorInsumo(
+            dataInicio, dataFim, inicioAnterior, fimAnterior
+        )) {
+            agregados.put(c.id(), c);
+        }
+
+        List<InsumoPoucoUtilizadoDTO> poucoUtilizados = classificarPoucoUtilizados(universo, agregados, hoje);
+        List<InsumoCapitalParadoDTO> capitalParado = classificarCapitalParado(universo, agregados);
+        List<InsumoQuedaConsumoDTO> quedaConsumo = classificarQuedaConsumo(universo, agregados);
+        List<InsumoForaDoPadraoDTO> foraDoPadrao = classificarForaDoPadrao(universo, dataFim, hoje);
+
+        return new InsumosBaixoUsoDTO(poucoUtilizados, capitalParado, quedaConsumo, foraDoPadrao);
+    }
+
+    private boolean isNovoInsumo(ConsumoAgregado agg, LocalDate hoje) {
+        return agg != null
+            && agg.primeiroUso() != null
+            && agg.primeiroUso().isAfter(hoje.minusDays(NOVO_DIAS));
+    }
+
+    /** Todos os insumos ativos ranqueados por consumo crescente (0 = sem uso no topo). */
+    private List<InsumoPoucoUtilizadoDTO> classificarPoucoUtilizados(
+        List<InsumoUniverso> universo,
+        Map<String, ConsumoAgregado> agregados,
+        LocalDate hoje
+    ) {
+        List<InsumoPoucoUtilizadoDTO> lista = new ArrayList<>();
+        for (InsumoUniverso ins : universo) {
+            ConsumoAgregado agg = agregados.get(ins.id());
+            double qtd = agg != null ? agg.qtdAtual() : 0.0;
+            double custo = agg != null ? agg.custoAtual() : 0.0;
+            LocalDate ultimoUso = agg != null ? agg.ultimoUso() : null;
+            lista.add(new InsumoPoucoUtilizadoDTO(
+                ins.id(), ins.nome(), ins.sigla(), qtd, custo, ultimoUso, isNovoInsumo(agg, hoje)
+            ));
+        }
+        // Menor consumo primeiro; entre empates, o que ficou parado há mais tempo
+        // (nunca usado — última saída null — primeiro).
+        lista.sort(
+            Comparator.comparingDouble(InsumoPoucoUtilizadoDTO::quantidadeConsumida)
+                .thenComparing(
+                    InsumoPoucoUtilizadoDTO::ultimoUso,
+                    Comparator.nullsFirst(Comparator.naturalOrder())
+                )
+        );
+        return limitar(lista);
+    }
+
+    /** Insumos com saldo em mãos (> 0) e nenhum consumo no período. */
+    private List<InsumoCapitalParadoDTO> classificarCapitalParado(
+        List<InsumoUniverso> universo,
+        Map<String, ConsumoAgregado> agregados
+    ) {
+        List<InsumoCapitalParadoDTO> lista = new ArrayList<>();
+        for (InsumoUniverso ins : universo) {
+            if (ins.estoqueAtual() <= 0.0) {
+                continue;
+            }
+            ConsumoAgregado agg = agregados.get(ins.id());
+            double qtdAtual = agg != null ? agg.qtdAtual() : 0.0;
+            if (qtdAtual > 0.0) {
+                continue; // girou no período → não é capital parado
+            }
+            LocalDate ultimoUso = agg != null ? agg.ultimoUso() : null;
+            lista.add(new InsumoCapitalParadoDTO(
+                ins.id(), ins.nome(), ins.sigla(),
+                ins.estoqueAtual(), ins.custoEstoque(), ultimoUso
+            ));
+        }
+        // Maior valor imobilizado primeiro.
+        lista.sort(Comparator.comparingDouble(InsumoCapitalParadoDTO::custoEstoqueParado).reversed());
+        return limitar(lista);
+    }
+
+    /** Maiores quedas % de consumo vs. o período anterior (piso de R$ no anterior). */
+    private List<InsumoQuedaConsumoDTO> classificarQuedaConsumo(
+        List<InsumoUniverso> universo,
+        Map<String, ConsumoAgregado> agregados
+    ) {
+        List<InsumoQuedaConsumoDTO> lista = new ArrayList<>();
+        for (InsumoUniverso ins : universo) {
+            ConsumoAgregado agg = agregados.get(ins.id());
+            if (agg == null || agg.custoAnterior() < PISO_CUSTO_INSUMO || agg.qtdAnterior() <= 0.0) {
+                continue;
+            }
+            if (agg.qtdAtual() >= agg.qtdAnterior()) {
+                continue;
+            }
+            double variacao = (agg.qtdAtual() - agg.qtdAnterior()) / agg.qtdAnterior() * 100.0;
+            lista.add(new InsumoQuedaConsumoDTO(
+                ins.id(), ins.nome(), ins.sigla(),
+                agg.qtdAtual(), agg.qtdAnterior(), variacao
+            ));
+        }
+        // Queda mais acentuada (variação mais negativa) primeiro.
+        lista.sort(Comparator.comparingDouble(InsumoQuedaConsumoDTO::variacaoPercentual));
+        return limitar(lista);
+    }
+
+    /** Consumo da última semana desviando (|z| ≥ 2) do histórico do próprio insumo. */
+    private List<InsumoForaDoPadraoDTO> classificarForaDoPadrao(
+        List<InsumoUniverso> universo,
+        LocalDate dataFim,
+        LocalDate hoje
+    ) {
+        // Ignora o futuro: a janela termina no fim do período ou hoje, o que vier antes.
+        LocalDate fimEfetivo = dataFim.isAfter(hoje) ? hoje : dataFim;
+        int nSemanas = ZSCORE_JANELA_SEMANAS;
+        LocalDate inicioRef = fimEfetivo.minusDays((long) nSemanas * 7 - 1);
+
+        Map<String, double[]> semanasPorInsumo = new HashMap<>();
+        for (ConsumoDiario c : repository.getConsumoDiarioPorInsumo(inicioRef, fimEfetivo)) {
+            long offset = ChronoUnit.DAYS.between(inicioRef, c.dia());
+            int semana = (int) (offset / 7);
+            if (semana < 0 || semana >= nSemanas) {
+                continue;
+            }
+            double[] buckets = semanasPorInsumo.computeIfAbsent(c.id(), k -> new double[nSemanas]);
+            buckets[semana] += c.qtd();
+        }
+
+        Map<String, InsumoUniverso> universoPorId = indexarInsumos(universo);
+
+        List<InsumoForaDoPadraoDTO> lista = new ArrayList<>();
+        for (Map.Entry<String, double[]> entry : semanasPorInsumo.entrySet()) {
+            InsumoUniverso ins = universoPorId.get(entry.getKey());
+            if (ins == null) {
+                continue; // consumido, mas fora do catálogo ativo
+            }
+            double[] semanas = entry.getValue();
+
+            int semanasComConsumo = 0;
+            for (double v : semanas) {
+                if (v > 0.0) {
+                    semanasComConsumo++;
+                }
+            }
+            if (semanasComConsumo < ZSCORE_MIN_SEMANAS_COM_CONSUMO) {
+                continue;
+            }
+
+            double media = media(semanas);
+            double desvio = desvioPadrao(semanas, media);
+            if (desvio <= 0.0) {
+                continue; // consumo constante → sem desvio possível
+            }
+
+            double ultima = semanas[nSemanas - 1];
+            double z = (ultima - media) / desvio;
+            if (Math.abs(z) < ZSCORE_LIMITE) {
+                continue;
+            }
+            lista.add(new InsumoForaDoPadraoDTO(
+                ins.id(), ins.nome(), ins.sigla(), ultima, media, desvio, z
+            ));
+        }
+        // Desvio mais forte (|z| maior) primeiro.
+        lista.sort(Comparator.comparingDouble((InsumoForaDoPadraoDTO d) -> Math.abs(d.zScore())).reversed());
+        return limitar(lista);
+    }
+
+    private static Map<String, InsumoUniverso> indexarInsumos(List<InsumoUniverso> universo) {
+        Map<String, InsumoUniverso> map = new HashMap<>();
+        for (InsumoUniverso ins : universo) {
+            map.put(ins.id(), ins);
+        }
+        return map;
+    }
+
+    private static double media(double[] xs) {
+        if (xs.length == 0) {
+            return 0.0;
+        }
+        double soma = 0.0;
+        for (double x : xs) {
+            soma += x;
+        }
+        return soma / xs.length;
+    }
+
+    /** Desvio padrão populacional de xs em torno da média já calculada. */
+    private static double desvioPadrao(double[] xs, double media) {
+        if (xs.length == 0) {
+            return 0.0;
+        }
+        double soma = 0.0;
+        for (double x : xs) {
+            double d = x - media;
+            soma += d * d;
+        }
+        return Math.sqrt(soma / xs.length);
     }
 }

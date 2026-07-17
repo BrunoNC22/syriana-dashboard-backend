@@ -340,6 +340,41 @@
   "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"mesesComVenda","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeUltimos6Meses","parameterTypes":[] }, {"name":"ultimaVenda","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.InsumosBaixoUsoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"capitalParado","parameterTypes":[] }, {"name":"foraDoPadrao","parameterTypes":[] }, {"name":"poucoUtilizados","parameterTypes":[] }, {"name":"quedaConsumo","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.InsumoPoucoUtilizadoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"custoConsumido","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"novo","parameterTypes":[] }, {"name":"quantidadeConsumida","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"ultimoUso","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.InsumoCapitalParadoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"custoEstoqueParado","parameterTypes":[] }, {"name":"estoqueAtual","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"ultimoUso","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.InsumoQuedaConsumoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeAnterior","parameterTypes":[] }, {"name":"quantidadeAtual","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"variacaoPercentual","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.InsumoForaDoPadraoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"consumoUltimaSemana","parameterTypes":[] }, {"name":"desvioPadrao","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"mediaSemanal","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"sigla","parameterTypes":[] }, {"name":"zScore","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.ErroValidacaoDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,

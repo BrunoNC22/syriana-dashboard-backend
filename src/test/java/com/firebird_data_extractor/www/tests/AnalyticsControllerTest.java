@@ -10,6 +10,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.firebird_data_extractor.www.controllers.AnalyticsController;
+import com.firebird_data_extractor.www.dto.InsumoCapitalParadoDTO;
+import com.firebird_data_extractor.www.dto.InsumoForaDoPadraoDTO;
+import com.firebird_data_extractor.www.dto.InsumoPoucoUtilizadoDTO;
+import com.firebird_data_extractor.www.dto.InsumoQuedaConsumoDTO;
+import com.firebird_data_extractor.www.dto.InsumosBaixoUsoDTO;
 import com.firebird_data_extractor.www.dto.ProdutoAbandonadoDTO;
 import com.firebird_data_extractor.www.dto.ProdutoQuedaDTO;
 import com.firebird_data_extractor.www.dto.ProdutoSemVendaDTO;
@@ -93,5 +98,54 @@ class AnalyticsControllerTest {
     void parametroAusenteRetorna400() throws Exception {
         mockMvc.perform(get("/analytics/produtos-baixo-desempenho?dataInicio=2025-05-01"))
             .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void insumosBaixoUsoSerializaAsQuatroListas() throws Exception {
+        when(service.analisarInsumos(any(LocalDate.class), any(LocalDate.class)))
+            .thenReturn(new InsumosBaixoUsoDTO(
+                List.of(new InsumoPoucoUtilizadoDTO(
+                    "3", "Grão de bico", "kg", 0.0, 0.0, LocalDate.of(2025, 2, 1), false)),
+                List.of(new InsumoCapitalParadoDTO(
+                    "4", "Tahine", "kg", 12.5, 340.0, LocalDate.of(2025, 1, 20))),
+                List.of(new InsumoQuedaConsumoDTO(
+                    "5", "Hortelã", "mç", 3.0, 30.0, -90.0)),
+                List.of(new InsumoForaDoPadraoDTO(
+                    "6", "Azeite", "L", 20.0, 8.0, 4.0, 3.0))
+            ));
+
+        mockMvc.perform(get("/analytics/insumos-baixo-uso?" + INTERVALO))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.poucoUtilizados[0].id").value("3"))
+            .andExpect(jsonPath("$.poucoUtilizados[0].quantidadeConsumida").value(0.0))
+            .andExpect(jsonPath("$.poucoUtilizados[0].ultimoUso").value("2025-02-01"))
+            .andExpect(jsonPath("$.capitalParado[0].id").value("4"))
+            .andExpect(jsonPath("$.capitalParado[0].custoEstoqueParado").value(340.0))
+            .andExpect(jsonPath("$.quedaConsumo[0].id").value("5"))
+            .andExpect(jsonPath("$.quedaConsumo[0].variacaoPercentual").value(-90.0))
+            .andExpect(jsonPath("$.foraDoPadrao[0].id").value("6"))
+            .andExpect(jsonPath("$.foraDoPadrao[0].zScore").value(3.0));
+    }
+
+    @Test
+    void insumosBaixoUsoListasVaziasSerializamComoArraysVazios() throws Exception {
+        when(service.analisarInsumos(any(LocalDate.class), any(LocalDate.class)))
+            .thenReturn(new InsumosBaixoUsoDTO(
+                List.of(), List.of(), List.of(), List.of()));
+
+        mockMvc.perform(get("/analytics/insumos-baixo-uso?" + INTERVALO))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.poucoUtilizados").isEmpty())
+            .andExpect(jsonPath("$.capitalParado").isEmpty())
+            .andExpect(jsonPath("$.quedaConsumo").isEmpty())
+            .andExpect(jsonPath("$.foraDoPadrao").isEmpty());
+    }
+
+    @Test
+    void insumosBaixoUsoIntervaloInvertidoRetorna400() throws Exception {
+        mockMvc.perform(get(
+                "/analytics/insumos-baixo-uso?dataInicio=2025-05-31&dataFim=2025-05-01"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.mensagem").exists());
     }
 }

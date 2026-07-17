@@ -45,6 +45,29 @@ public class AnalyticsRepository {
     /** Total vendido de um produto-detalhe num mês (índice ano*12+mês). */
     public record VendaMensal(String id, int mesIndice, double qtd) {}
 
+    /** Insumo ativo (universo das análises de baixo uso); id = PRODUTOS.CODIGO. */
+    public record InsumoUniverso(
+        String id,
+        String nome,
+        String sigla,
+        double estoqueAtual,
+        double custoEstoque
+    ) {}
+
+    /** Consumo agregado (histórico + por período) de um insumo. */
+    public record ConsumoAgregado(
+        String id,
+        LocalDate primeiroUso,
+        LocalDate ultimoUso,
+        double qtdAtual,
+        double qtdAnterior,
+        double custoAtual,
+        double custoAnterior
+    ) {}
+
+    /** Consumo de um insumo (PRODUTOS.CODIGO) num dia. */
+    public record ConsumoDiario(String id, LocalDate dia, double qtd) {}
+
     private static LocalDate toLocalDate(Timestamp ts) {
         return ts != null ? ts.toLocalDateTime().toLocalDate() : null;
     }
@@ -193,6 +216,134 @@ public class AnalyticsRepository {
             (rs, rowNum) -> new VendaMensal(
                 String.valueOf(rs.getInt("id")),
                 rs.getInt("mes_indice"),
+                rs.getDouble("qtd")
+            ),
+            inicio, fim
+        );
+    }
+
+    // ------------------------------------------------------------------
+    // Insumos — consumo via ESTOQUEMOVIMENTACAO TIPO='S' (saída).
+    // O insumo é identificado por PRODUTODETALHE.CODIGOPRODUTO (= PRODUTOS.CODIGO);
+    // a data da movimentação é DATAINSERT e a QTD é negativa (ABS = magnitude).
+    // ------------------------------------------------------------------
+
+    /**
+     * Insumos ativos (universo das análises): só do tipo Insumo
+     * (CODIGOPRODUTOTIPO = 2), ativos (não descontinuados, sem prefixo
+     * "* Excluído *") e com pelo menos um PRODUTODETALHE ativo (não deletado,
+     * não pausado). Traz o saldo em mãos somado dos detalhes e o custo desse
+     * saldo (para "capital parado"). O id é o PRODUTOS.CODIGO do insumo.
+     */
+    public List<InsumoUniverso> getCatalogoInsumoAtivo() {
+        return this.jdbc.query(
+            """
+            SELECT
+                p.CODIGO AS id,
+                MIN(p.NOME) AS nome,
+                MIN(u.SIGLA) AS sigla,
+                COALESCE(SUM(pd.ESTOQUEATUAL), 0) AS estoque_atual,
+                COALESCE(SUM(pd.ESTOQUEATUAL * pd.PRECOCUSTO), 0) AS custo_estoque
+            FROM PRODUTOS p
+            JOIN PRODUTODETALHE pd ON pd.CODIGOPRODUTO = p.CODIGO
+            LEFT JOIN UNIDADECOMERCIALIZACAO u ON u.CODIGO = p.CODIGOUNIDADECOMERCIAL
+            WHERE
+                p.CODIGOPRODUTOTIPO = 2
+                AND p.DESCONTINUADO = 'N'
+                AND p.NOME NOT LIKE '%Excluído%'
+                AND pd.DATADELETE IS NULL
+                AND pd.DATAPAUSADO IS NULL
+            GROUP BY p.CODIGO
+            ORDER BY MIN(p.NOME)
+            """,
+            (rs, rowNum) -> new InsumoUniverso(
+                String.valueOf(rs.getInt("id")),
+                rs.getString("nome"),
+                rs.getString("sigla"),
+                rs.getDouble("estoque_atual"),
+                rs.getDouble("custo_estoque")
+            )
+        );
+    }
+
+    /**
+     * Por insumo (PRODUTOS.CODIGO): primeira e última saída (qualquer época) e
+     * o consumo (quantidade e custo) no período atual e no período anterior de
+     * mesma duração. Uma varredura só de ESTOQUEMOVIMENTACAO 'S' com somas
+     * condicionais; QTD negativa → ABS para a magnitude.
+     */
+    public List<ConsumoAgregado> getAgregadoConsumoPorInsumo(
+        LocalDate inicioAtual,
+        LocalDate fimAtual,
+        LocalDate inicioAnterior,
+        LocalDate fimAnterior
+    ) {
+        LocalDateTime atualInicio = inicioAtual.atStartOfDay();
+        LocalDateTime atualFim = fimAtual.plusDays(1).atStartOfDay();
+        LocalDateTime anteriorInicio = inicioAnterior.atStartOfDay();
+        LocalDateTime anteriorFim = fimAnterior.plusDays(1).atStartOfDay();
+
+        return this.jdbc.query(
+            """
+            SELECT
+                pd.CODIGOPRODUTO AS id,
+                MIN(em.DATAINSERT) AS primeiro_uso,
+                MAX(em.DATAINSERT) AS ultimo_uso,
+                ABS(SUM(CASE WHEN em.DATAINSERT >= ? AND em.DATAINSERT < ?
+                             THEN em.QTD ELSE 0 END)) AS qtd_atual,
+                ABS(SUM(CASE WHEN em.DATAINSERT >= ? AND em.DATAINSERT < ?
+                             THEN em.QTD ELSE 0 END)) AS qtd_anterior,
+                ABS(SUM(CASE WHEN em.DATAINSERT >= ? AND em.DATAINSERT < ?
+                             THEN em.QTD * pd.PRECOCUSTO ELSE 0 END)) AS custo_atual,
+                ABS(SUM(CASE WHEN em.DATAINSERT >= ? AND em.DATAINSERT < ?
+                             THEN em.QTD * pd.PRECOCUSTO ELSE 0 END)) AS custo_anterior
+            FROM ESTOQUEMOVIMENTACAO em
+            JOIN PRODUTODETALHE pd ON pd.CODIGO = em.CODIGOPRODUTODETALHE
+            WHERE
+                em.DATADELETE IS NULL
+                AND em.TIPO = 'S'
+            GROUP BY pd.CODIGOPRODUTO
+            """,
+            (rs, rowNum) -> new ConsumoAgregado(
+                String.valueOf(rs.getInt("id")),
+                toLocalDate(rs.getTimestamp("primeiro_uso")),
+                toLocalDate(rs.getTimestamp("ultimo_uso")),
+                rs.getDouble("qtd_atual"),
+                rs.getDouble("qtd_anterior"),
+                rs.getDouble("custo_atual"),
+                rs.getDouble("custo_anterior")
+            ),
+            atualInicio, atualFim, anteriorInicio, anteriorFim,
+            atualInicio, atualFim, anteriorInicio, anteriorFim
+        );
+    }
+
+    /** Consumo por insumo (PRODUTOS.CODIGO) e por dia dentro do intervalo. */
+    public List<ConsumoDiario> getConsumoDiarioPorInsumo(
+        LocalDate dataInicio,
+        LocalDate dataFim
+    ) {
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
+
+        return this.jdbc.query(
+            """
+            SELECT
+                pd.CODIGOPRODUTO AS id,
+                CAST(em.DATAINSERT AS DATE) AS dia,
+                ABS(SUM(em.QTD)) AS qtd
+            FROM ESTOQUEMOVIMENTACAO em
+            JOIN PRODUTODETALHE pd ON pd.CODIGO = em.CODIGOPRODUTODETALHE
+            WHERE
+                em.DATADELETE IS NULL
+                AND em.TIPO = 'S'
+                AND em.DATAINSERT >= ?
+                AND em.DATAINSERT < ?
+            GROUP BY pd.CODIGOPRODUTO, CAST(em.DATAINSERT AS DATE)
+            """,
+            (rs, rowNum) -> new ConsumoDiario(
+                String.valueOf(rs.getInt("id")),
+                rs.getDate("dia").toLocalDate(),
                 rs.getDouble("qtd")
             ),
             inicio, fim
