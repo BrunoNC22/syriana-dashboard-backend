@@ -82,7 +82,6 @@ public class DashboardRepository {
         return this.jdbc.query(
             """
             SELECT
-                FIRST 10
                 i.CODIGOPRODUTODETALHE,
                 MIN(i.NOMEPRODUTO) AS nomeproduto,
                 SUM(i.QUANTIDADE) AS total_vendido
@@ -181,7 +180,6 @@ public class DashboardRepository {
         return this.jdbc.query(
             """
             SELECT
-                FIRST 10
                 i.CODIGOPRODUTODETALHE,
                 MIN(i.NOMEPRODUTO) AS nomeproduto,
                 SUM(i.VALORTOTAL) AS faturamento
@@ -413,7 +411,6 @@ public class DashboardRepository {
         return this.jdbc.query(
             """
             SELECT
-                first 10
                 pdt.CODIGO,
                 pdt.NOME,
                 abs(sum(em.QTD)) as quantidade,

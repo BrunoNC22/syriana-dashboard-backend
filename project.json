@@ -29,6 +29,29 @@
       }
     },
 
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/pom.xml",
+        "{projectRoot}/src/main/**/*",
+        "{projectRoot}/src/test/**/*",
+        "!{projectRoot}/src/main/resources/META-INF/native-image/**/*"
+      ],
+      "options": {
+        "command": ".\\mvnw.cmd test",
+        "cwd": "apps/backend"
+      }
+    },
+
+    "test-agent": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": ".\\mvnw.cmd test -Pagent-test",
+        "cwd": "apps/backend"
+      }
+    },
+
     "package-jar": {
       "executor": "nx:run-commands",
       "cache": true,

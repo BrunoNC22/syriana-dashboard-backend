@@ -305,6 +305,20 @@
   "methods":[{"name":"custoTotal","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"insumos","parameterTypes":[] }, {"name":"lucro","parameterTypes":[] }, {"name":"margemLucro","parameterTypes":[] }, {"name":"nomeProduto","parameterTypes":[] }, {"name":"quantidadeVendida","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.ErroValidacaoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"mensagem","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutoCatalogoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"idProduto","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"tipo","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.ProdutoMaisVendidoDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,

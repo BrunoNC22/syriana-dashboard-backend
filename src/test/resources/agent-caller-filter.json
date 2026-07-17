@@ -1,0 +1,18 @@
+{
+  "rules": [
+    { "excludeClasses": "org.apache.maven.**" },
+    { "excludeClasses": "org.junit.**" },
+    { "excludeClasses": "junit.**" },
+    { "excludeClasses": "org.mockito.**" },
+    { "excludeClasses": "net.bytebuddy.**" },
+    { "excludeClasses": "org.objenesis.**" },
+    { "excludeClasses": "org.assertj.**" },
+    { "excludeClasses": "org.hamcrest.**" },
+    { "excludeClasses": "org.opentest4j.**" },
+    { "excludeClasses": "org.apiguardian.**" },
+    { "excludeClasses": "org.testng.**" },
+    { "excludeClasses": "org.springframework.test.**" },
+    { "excludeClasses": "org.springframework.boot.test.**" },
+    { "excludeClasses": "org.springframework.mock.**" }
+  ]
+}

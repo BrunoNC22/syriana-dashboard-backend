@@ -73,6 +73,26 @@
 
     <profiles>
 
+        <!--
+            Executa os testes com o native-image-agent anexado à JVM do Surefire,
+            mesclando as configs de reflection exercitadas pelos testes em
+            META-INF/native-image (mesmo config-merge-dir do fluxo serve-native-agent).
+
+            O access-filter-file impede que reflections do próprio framework de teste
+            (JUnit, Mockito, Surefire...) poluam as configs de produção.
+
+            Uso: .\mvnw.cmd test -Pagent-test   (requer JVM GraalVM)
+        -->
+        <profile>
+
+            <id>agent-test</id>
+
+            <properties>
+                <argLine>-agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image,caller-filter-file=src/test/resources/agent-caller-filter.json,access-filter-file=src/test/resources/agent-access-filter.json</argLine>
+            </properties>
+
+        </profile>
+
         <profile>
 
             <id>native</id>
