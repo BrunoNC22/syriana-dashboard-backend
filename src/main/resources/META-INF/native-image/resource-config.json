@@ -61,6 +61,14 @@
   }, {
     "pattern":"\\Qapplication-default.yml\\E"
   }, {
+    "pattern":"\\Qapplication-native-agent.properties\\E"
+  }, {
+    "pattern":"\\Qapplication-native-agent.xml\\E"
+  }, {
+    "pattern":"\\Qapplication-native-agent.yaml\\E"
+  }, {
+    "pattern":"\\Qapplication-native-agent.yml\\E"
+  }, {
     "pattern":"\\Qapplication.properties\\E"
   }, {
     "pattern":"\\Qapplication.xml\\E"
@@ -81,6 +89,8 @@
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/DashboardController.class\\E"
   }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/controllers/DevShutdownController.class\\E"
+  }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/GarconsController.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/MetadataController.class\\E"
@@ -100,6 +110,14 @@
     "pattern":"\\Qconfig/application-default.yaml\\E"
   }, {
     "pattern":"\\Qconfig/application-default.yml\\E"
+  }, {
+    "pattern":"\\Qconfig/application-native-agent.properties\\E"
+  }, {
+    "pattern":"\\Qconfig/application-native-agent.xml\\E"
+  }, {
+    "pattern":"\\Qconfig/application-native-agent.yaml\\E"
+  }, {
+    "pattern":"\\Qconfig/application-native-agent.yml\\E"
   }, {
     "pattern":"\\Qconfig/application.properties\\E"
   }, {
@@ -502,6 +520,8 @@
     "pattern":"\\Qorg/springframework/context/annotation/ImportBeanDefinitionRegistrar.class\\E"
   }, {
     "pattern":"\\Qorg/springframework/context/annotation/ImportRuntimeHints.class\\E"
+  }, {
+    "pattern":"\\Qorg/springframework/context/annotation/Profile.class\\E"
   }, {
     "pattern":"\\Qorg/springframework/context/annotation/Role.class\\E"
   }, {

@@ -12,7 +12,37 @@
     "serve-native-agent": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "java -agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image -jar target/www-0.0.1-SNAPSHOT.jar",
+        "commands": [
+          "cmd /c if exist src\\main\\resources\\META-INF\\native-image\\.lock del src\\main\\resources\\META-INF\\native-image\\.lock",
+          "java -Dspring.profiles.active=native-agent -agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image -jar target/www-0.0.1-SNAPSHOT.jar"
+        ],
+        "parallel": false,
+        "cwd": "apps/backend"
+      }
+    },
+
+    "stop-agent": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node -e \"fetch('http://127.0.0.1:23984/dev/shutdown',{method:'POST'}).then(r=>r.text()).then(t=>console.log(t)).catch(()=>{console.error('Backend não respondeu — ele está rodando com serve-native-agent?');process.exit(1)})\"",
+        "cwd": "apps/backend"
+      }
+    },
+
+    "package-jar": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/pom.xml",
+        "{projectRoot}/src/main/java/**/*",
+        "{projectRoot}/src/main/resources/**/*",
+        "!{projectRoot}/src/main/resources/META-INF/native-image/**/*"
+      ],
+      "outputs": [
+        "{projectRoot}/target/www-0.0.1-SNAPSHOT.jar"
+      ],
+      "options": {
+        "command": ".\\mvnw.cmd -q -DskipTests package",
         "cwd": "apps/backend"
       }
     },
@@ -20,12 +50,13 @@
     "build": {
       "executor": "nx:run-commands",
       "inputs": [
+        "{projectRoot}/pom.xml",
         "{projectRoot}/src/**/*.java",
         "{projectRoot}/src/**/*.json",
         "{projectRoot}/src/**/*.properties"
       ],
       "outputs": [
-        "{projectRoot}/target"
+        "{projectRoot}/target/www.exe"
       ],
       "options": {
         "command": ".\\mvnw.cmd -Pnative package",
