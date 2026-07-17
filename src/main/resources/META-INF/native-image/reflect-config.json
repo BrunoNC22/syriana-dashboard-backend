@@ -305,6 +305,41 @@
   "methods":[{"name":"custoTotal","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"insumos","parameterTypes":[] }, {"name":"lucro","parameterTypes":[] }, {"name":"margemLucro","parameterTypes":[] }, {"name":"nomeProduto","parameterTypes":[] }, {"name":"quantidadeVendida","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.ProdutosBaixoDesempenhoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"abandonados","parameterTypes":[] }, {"name":"maioresQuedas","parameterTypes":[] }, {"name":"semVendas","parameterTypes":[] }, {"name":"tendenciaQueda","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutoSemVendaDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"novo","parameterTypes":[] }, {"name":"ultimaVenda","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutoQuedaDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeAnterior","parameterTypes":[] }, {"name":"quantidadeAtual","parameterTypes":[] }, {"name":"variacaoPercentual","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutoTendenciaQuedaDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeTotal","parameterTypes":[] }, {"name":"semanas","parameterTypes":[] }, {"name":"slopePorSemana","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ProdutoAbandonadoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"etiqueta","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"mesesComVenda","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"quantidadeUltimos6Meses","parameterTypes":[] }, {"name":"ultimaVenda","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.ErroValidacaoDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
