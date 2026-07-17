@@ -1,5 +1,6 @@
 package com.firebird_data_extractor.www.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import org.firebirdsql.ds.FBSimpleDataSource;
@@ -29,6 +30,10 @@ public class DatabaseConfig {
         );
 
         ObjectMapper mapper = new ObjectMapper();
+
+        // O server-config.json também carrega campos usados só pelo Electron
+        // (ex.: adminPassword). Campos desconhecidos não podem derrubar o boot.
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         ServerConfig config = mapper.readValue(
             configPath.toFile(),
