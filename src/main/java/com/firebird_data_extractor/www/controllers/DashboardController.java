@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.firebird_data_extractor.www.dto.DiaSerieDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorHoraDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorProduto;
@@ -117,6 +118,17 @@ public class DashboardController {
         validarIntervalo(dataInicio, dataFim);
 
         return this.repository.getFaturamentoPorDia(dataInicio, dataFim);
+    }
+
+    @GetMapping("/series-diarias")
+    public List<DiaSerieDTO> getSeriesDiarias(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim
+    ) {
+
+        validarIntervalo(dataInicio, dataFim);
+
+        return this.repository.getSeriesDiarias(dataInicio, dataFim);
     }
 
     @GetMapping("/faturamento-por-produto")

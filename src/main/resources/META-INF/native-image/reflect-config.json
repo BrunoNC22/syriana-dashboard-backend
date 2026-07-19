@@ -232,7 +232,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.DashboardRepository"] }, {"name":"getFaturamentoPorDia","parameterTypes":["int","java.lang.Integer"] }, {"name":"getFaturamentoPorDia","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getFaturamentoPorProduto","parameterTypes":["int","java.lang.Integer"] }, {"name":"getFaturamentoPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getHorarioDePico","parameterTypes":["int","int","java.lang.Integer"] }, {"name":"getHorarioDePico","parameterTypes":["int","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getInsumoDetalhes","parameterTypes":["java.lang.Integer","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getInsumosQueMaisCustaram","parameterTypes":["int","java.lang.Integer"] }, {"name":"getInsumosQueMaisCustaram","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getLucroTotal","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getProdutoDetalhes","parameterTypes":["java.lang.Integer","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getProdutosMaisVendidos","parameterTypes":["int","java.lang.Integer"] }, {"name":"getProdutosMaisVendidos","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getTotalGastoIngredientes","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getTotalVendido","parameterTypes":["int","java.lang.Integer"] }, {"name":"getTotalVendido","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"quantidadeDePedidos","parameterTypes":["int","java.lang.Integer"] }, {"name":"quantidadeDePedidos","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.DashboardRepository"] }, {"name":"getFaturamentoPorDia","parameterTypes":["int","java.lang.Integer"] }, {"name":"getFaturamentoPorDia","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getFaturamentoPorProduto","parameterTypes":["int","java.lang.Integer"] }, {"name":"getFaturamentoPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getHorarioDePico","parameterTypes":["int","int","java.lang.Integer"] }, {"name":"getHorarioDePico","parameterTypes":["int","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getInsumoDetalhes","parameterTypes":["java.lang.Integer","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getInsumosQueMaisCustaram","parameterTypes":["int","java.lang.Integer"] }, {"name":"getInsumosQueMaisCustaram","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getLucroTotal","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getProdutoDetalhes","parameterTypes":["java.lang.Integer","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getProdutosMaisVendidos","parameterTypes":["int","java.lang.Integer"] }, {"name":"getProdutosMaisVendidos","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getSeriesDiarias","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getTotalGastoIngredientes","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getTotalVendido","parameterTypes":["int","java.lang.Integer"] }, {"name":"getTotalVendido","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"quantidadeDePedidos","parameterTypes":["int","java.lang.Integer"] }, {"name":"quantidadeDePedidos","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
 },
 {
   "name":"com.firebird_data_extractor.www.controllers.DevShutdownController",
@@ -275,6 +275,13 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"mensagem","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.DiaSerieDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"dia","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"pedidos","parameterTypes":[] }, {"name":"custo","parameterTypes":[] }, {"name":"lucro","parameterTypes":[] }]
 },
 {
   "name":"com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO",

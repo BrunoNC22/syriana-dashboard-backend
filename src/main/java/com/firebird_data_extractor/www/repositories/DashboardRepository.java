@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.firebird_data_extractor.www.dto.DiaSerieDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorHoraDTO;
 import com.firebird_data_extractor.www.dto.FaturamentoPorProduto;
@@ -166,6 +167,121 @@ public class DashboardRepository {
             .sorted(
                 Comparator.comparing(FaturamentoPorDiaDTO::dia)
             )
+            .toList();
+    }
+
+    /**
+     * Série diária com todas as métricas (faturamento, pedidos, custo, lucro)
+     * para o intervalo, com os dias vazios preenchidos com zero. Usada pelas
+     * sparklines dos KPIs. Duas queries agregadas (PEDIDOS e ESTOQUEMOVIMENTACAO)
+     * mescladas por dia em Java, evitando a multiplicação de linhas de um join.
+     */
+    public List<DiaSerieDTO> getSeriesDiarias(LocalDate dataInicio, LocalDate dataFim) {
+
+        // acumulador por dia: [faturamento, pedidos, custo]
+        Map<LocalDate, double[]> acc = new HashMap<>();
+
+        for (
+            LocalDate data = dataInicio;
+            !data.isAfter(dataFim);
+            data = data.plusDays(1)
+        ) {
+            acc.put(data, new double[] { 0.0, 0.0, 0.0 });
+        }
+
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
+
+        this.jdbc.query(
+            """
+            SELECT
+                CAST(DATAABERTURA AS DATE) AS dia,
+                SUM(VALORTOTAL) AS faturamento,
+                COUNT(*) AS pedidos
+            FROM PEDIDOS
+            WHERE
+                DATADELETE IS NULL
+                AND DATAABERTURA >= ?
+                AND DATAABERTURA < ?
+            GROUP BY dia
+            """,
+            rs -> {
+
+                LocalDate dia = rs.getDate("dia").toLocalDate();
+
+                double[] a = acc.get(dia);
+
+                if (a == null) {
+                    return;
+                }
+
+                double faturamento = rs.getDouble("faturamento");
+
+                if (rs.wasNull()) {
+                    faturamento = 0.0;
+                }
+
+                a[0] = faturamento;
+                a[1] = rs.getInt("pedidos");
+            },
+            inicio,
+            fim
+        );
+
+        this.jdbc.query(
+            """
+            SELECT
+                CAST(em.DATAINSERT AS DATE) AS dia,
+                ABS(SUM(em.QTD * pd.PRECOCUSTO)) AS custo
+            FROM ESTOQUEMOVIMENTACAO em
+            JOIN PRODUTODETALHE pd
+                ON pd.CODIGO = em.CODIGOPRODUTODETALHE
+            WHERE
+                em.DATADELETE IS NULL
+                AND em.TIPO = 'S'
+                AND em.DATAINSERT >= ?
+                AND em.DATAINSERT < ?
+            GROUP BY dia
+            """,
+            rs -> {
+
+                LocalDate dia = rs.getDate("dia").toLocalDate();
+
+                double[] a = acc.get(dia);
+
+                if (a == null) {
+                    return;
+                }
+
+                double custo = rs.getDouble("custo");
+
+                if (rs.wasNull()) {
+                    custo = 0.0;
+                }
+
+                a[2] = custo;
+            },
+            inicio,
+            fim
+        );
+
+        return acc.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .map(entry -> {
+
+                double faturamento = entry.getValue()[0];
+                int pedidos = (int) entry.getValue()[1];
+                double custo = entry.getValue()[2];
+
+                return new DiaSerieDTO(
+                    entry.getKey(),
+                    faturamento,
+                    pedidos,
+                    custo,
+                    faturamento - custo
+                );
+            })
             .toList();
     }
 
