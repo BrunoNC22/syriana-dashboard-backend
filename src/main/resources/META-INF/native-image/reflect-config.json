@@ -270,18 +270,18 @@
   "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ProdutoRepository"] }, {"name":"getCatalogo","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.DiaSerieDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"custo","parameterTypes":[] }, {"name":"dia","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"lucro","parameterTypes":[] }, {"name":"pedidos","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.ErroValidacaoDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"mensagem","parameterTypes":[] }]
-},
-{
-  "name":"com.firebird_data_extractor.www.dto.DiaSerieDTO",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"dia","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"pedidos","parameterTypes":[] }, {"name":"custo","parameterTypes":[] }, {"name":"lucro","parameterTypes":[] }]
 },
 {
   "name":"com.firebird_data_extractor.www.dto.FaturamentoPorDiaDTO",
@@ -482,7 +482,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }, {"name":"getFaturamentoPorDia","parameterTypes":["int","java.lang.Integer"] }, {"name":"getFaturamentoPorDia","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getFaturamentoPorProduto","parameterTypes":["int","java.lang.Integer"] }, {"name":"getFaturamentoPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getInsumoDetalhes","parameterTypes":["java.lang.Integer","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getInsumosQueMaisCustaram","parameterTypes":["int","java.lang.Integer"] }, {"name":"getInsumosQueMaisCustaram","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getLucroTotal","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getMediaFaturamentoPorHoraPorDiaSemana","parameterTypes":["int","int","java.lang.Integer"] }, {"name":"getMediaFaturamentoPorHoraPorDiaSemana","parameterTypes":["int","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getProdutoDetalhes","parameterTypes":["java.lang.Integer","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getProdutosMaisVendidos","parameterTypes":["int","java.lang.Integer"] }, {"name":"getProdutosMaisVendidos","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getQuantidadeDePedidos","parameterTypes":["int","java.lang.Integer"] }, {"name":"getQuantidadeDePedidos","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getTotalGastoIngredientes","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getTotalVendido","parameterTypes":["int","java.lang.Integer"] }, {"name":"getTotalVendido","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }, {"name":"getFaturamentoPorDia","parameterTypes":["int","java.lang.Integer"] }, {"name":"getFaturamentoPorDia","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getFaturamentoPorProduto","parameterTypes":["int","java.lang.Integer"] }, {"name":"getFaturamentoPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getInsumoDetalhes","parameterTypes":["java.lang.Integer","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getInsumosQueMaisCustaram","parameterTypes":["int","java.lang.Integer"] }, {"name":"getInsumosQueMaisCustaram","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getLucroTotal","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getMediaFaturamentoPorHoraPorDiaSemana","parameterTypes":["int","int","java.lang.Integer"] }, {"name":"getMediaFaturamentoPorHoraPorDiaSemana","parameterTypes":["int","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getProdutoDetalhes","parameterTypes":["java.lang.Integer","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getProdutosMaisVendidos","parameterTypes":["int","java.lang.Integer"] }, {"name":"getProdutosMaisVendidos","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getQuantidadeDePedidos","parameterTypes":["int","java.lang.Integer"] }, {"name":"getQuantidadeDePedidos","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getSeriesDiarias","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getTotalGastoIngredientes","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getTotalVendido","parameterTypes":["int","java.lang.Integer"] }, {"name":"getTotalVendido","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
 },
 {
   "name":"com.firebird_data_extractor.www.repositories.DashboardRepository$$SpringCGLIB$$0",
