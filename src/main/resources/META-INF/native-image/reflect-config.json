@@ -270,6 +270,13 @@
   "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ProdutoRepository"] }, {"name":"getCatalogo","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.controllers.RelatoriosController",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.services.RelatorioComprasService"] }, {"name":"getPrevisaoCompras","parameterTypes":["java.lang.String"] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.DiaSerieDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -382,6 +389,20 @@
   "methods":[{"name":"capitalParado","parameterTypes":[] }, {"name":"foraDoPadrao","parameterTypes":[] }, {"name":"poucoUtilizados","parameterTypes":[] }, {"name":"quedaConsumo","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.LinhaCompraDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"compraRecomendada","parameterTypes":[] }, {"name":"consumoPrevisto","parameterTypes":[] }, {"name":"custoCompraRecomendada","parameterTypes":[] }, {"name":"custoPrevisto","parameterTypes":[] }, {"name":"diasCobertura","parameterTypes":[] }, {"name":"estoqueAtual","parameterTypes":[] }, {"name":"estoqueConfiavel","parameterTypes":[] }, {"name":"estoqueSeguranca","parameterTypes":[] }, {"name":"excesso","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"justificativa","parameterTypes":[] }, {"name":"margemSeguranca","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }, {"name":"riscoRuptura","parameterTypes":[] }, {"name":"siglaUnidadeDeMedida","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.PanoramaCompraDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"datasEspeciais","parameterTypes":[] }, {"name":"faturamento","parameterTypes":[] }, {"name":"pedidos","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.PontoPrevisaoDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -466,6 +487,20 @@
   "methods":[{"name":"abandonados","parameterTypes":[] }, {"name":"maioresQuedas","parameterTypes":[] }, {"name":"semVendas","parameterTypes":[] }, {"name":"tendenciaQueda","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.RelatorioComprasDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"avisos","parameterTypes":[] }, {"name":"baseHistorica","parameterTypes":[] }, {"name":"compras","parameterTypes":[] }, {"name":"geradoEm","parameterTypes":[] }, {"name":"horizonteDias","parameterTypes":[] }, {"name":"horizonteFim","parameterTypes":[] }, {"name":"horizonteInicio","parameterTypes":[] }, {"name":"panorama","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.ValorPrevistoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"limiteInferior","parameterTypes":[] }, {"name":"limiteSuperior","parameterTypes":[] }, {"name":"mape","parameterTypes":[] }, {"name":"metodo","parameterTypes":[] }, {"name":"total","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.repositories.AnalyticsRepository",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -490,11 +525,23 @@
   "methods":[{"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.repositories.EstoqueRepository",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }, {"name":"getConsumoPorInsumo","parameterTypes":["java.time.LocalDate","java.time.LocalDate","com.firebird_data_extractor.www.repositories.EstoqueRepository$Granularidade"] }, {"name":"getSaldosPorInsumo","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.repositories.EstoqueRepository$$SpringCGLIB$$0",
+  "fields":[{"name":"CGLIB$CALLBACK_FILTER"}, {"name":"CGLIB$FACTORY_DATA"}],
+  "methods":[{"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
+},
+{
   "name":"com.firebird_data_extractor.www.repositories.ForecastRepository",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }, {"name":"getSerieDiariaFaturamento","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }, {"name":"getSerieDiariaCustoConsumo","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getSerieDiariaFaturamento","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getSerieDiariaPedidos","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
 },
 {
   "name":"com.firebird_data_extractor.www.repositories.ForecastRepository$$SpringCGLIB$$0",
@@ -564,6 +611,13 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ForecastRepository","com.firebird_data_extractor.www.services.ForecastService","com.firebird_data_extractor.www.services.HolidayCalendarService"] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.services.RelatorioComprasService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ForecastRepository","com.firebird_data_extractor.www.repositories.EstoqueRepository","com.firebird_data_extractor.www.services.ForecastService","com.firebird_data_extractor.www.services.PrevisaoService","com.firebird_data_extractor.www.services.HolidayCalendarService"] }]
 },
 {
   "name":"com.github.benmanes.caffeine.cache.Caffeine"

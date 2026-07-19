@@ -48,6 +48,32 @@ public class ForecastRepository {
         );
     }
 
+    /**
+     * Custo diário estimado de consumo de insumos (saídas de estoque,
+     * {@code TIPO='S'}) no intervalo; só dias com saída. É a série que o
+     * relatório de compras prevê para depois desagregar por insumo (top-down).
+     * QTD é negativa no banco → {@code ABS}; custo via {@code PRECOCUSTO} atual
+     * ({@code VALORCOMPRA} é ~100% NULL).
+     */
+    public Map<LocalDate, Double> getSerieDiariaCustoConsumo(LocalDate dataInicio, LocalDate dataFim) {
+        return serieDiaria(
+            """
+            SELECT
+                CAST(em.DATAINSERT AS DATE) AS dia,
+                ABS(SUM(em.QTD * pd.PRECOCUSTO)) AS valor
+            FROM ESTOQUEMOVIMENTACAO em
+            JOIN PRODUTODETALHE pd ON pd.CODIGO = em.CODIGOPRODUTODETALHE
+            WHERE
+                em.DATADELETE IS NULL
+                AND em.TIPO = 'S'
+                AND em.DATAINSERT >= ?
+                AND em.DATAINSERT < ?
+            GROUP BY CAST(em.DATAINSERT AS DATE)
+            """,
+            dataInicio, dataFim
+        );
+    }
+
     /** Nº de pedidos por dia (COUNT) no intervalo; só dias com pedidos. */
     public Map<LocalDate, Double> getSerieDiariaPedidos(LocalDate dataInicio, LocalDate dataFim) {
         return serieDiaria(
