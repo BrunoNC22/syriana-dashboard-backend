@@ -256,6 +256,13 @@
   "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.MetadataRepository"] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.controllers.PrevisaoController",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.services.PrevisaoService"] }, {"name":"getPrevisao","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
   "name":"com.firebird_data_extractor.www.controllers.ProdutosController",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -476,6 +483,18 @@
   "methods":[{"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.repositories.ForecastRepository",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }, {"name":"getSerieDiariaFaturamento","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.repositories.ForecastRepository$$SpringCGLIB$$0",
+  "fields":[{"name":"CGLIB$CALLBACK_FILTER"}, {"name":"CGLIB$FACTORY_DATA"}],
+  "methods":[{"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
+},
+{
   "name":"com.firebird_data_extractor.www.repositories.GarcomRepository",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -517,6 +536,27 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.AnalyticsRepository"] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.services.ForecastService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.services.HolidayCalendarService"] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.services.HolidayCalendarService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.services.PrevisaoService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ForecastRepository","com.firebird_data_extractor.www.services.ForecastService","com.firebird_data_extractor.www.services.HolidayCalendarService"] }]
 },
 {
   "name":"com.github.benmanes.caffeine.cache.Caffeine"

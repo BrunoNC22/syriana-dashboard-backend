@@ -99,6 +99,8 @@
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/MetadataController.class\\E"
   }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/controllers/PrevisaoController.class\\E"
+  }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/ProdutosController.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$ConsumoAgregado.class\\E"
@@ -119,6 +121,8 @@
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/DashboardRepository.class\\E"
   }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/ForecastRepository.class\\E"
+  }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/GarcomRepository$GarcomAcumulador.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/GarcomRepository.class\\E"
@@ -128,6 +132,32 @@
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/ProdutoRepository.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/services/AnalyticsService.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/ForecastService$HW.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/ForecastService$Metodo.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/ForecastService$PontoPrevisto.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/ForecastService$Previsao.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/ForecastService.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/HolidayCalendarService$CategoriaFeriado.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/HolidayCalendarService$DefinicaoFeriado.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/HolidayCalendarService$Feriado.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/HolidayCalendarService$Uplift.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/HolidayCalendarService.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/PrevisaoService$Entrada.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/PrevisaoService$Metrica.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/PrevisaoService.class\\E"
   }, {
     "pattern":"\\Qconfig/application-default.properties\\E"
   }, {
