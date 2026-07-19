@@ -218,7 +218,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.services.AnalyticsService"] }, {"name":"getProdutosBaixoDesempenho","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.services.AnalyticsService"] }, {"name":"getInsumosBaixoUso","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getProdutosBaixoDesempenho","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
 },
 {
   "name":"com.firebird_data_extractor.www.controllers.ApiExceptionHandler",
@@ -435,7 +435,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }, {"name":"getAgregadoVendasPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getCatalogoVendavelAtivo","parameterTypes":[] }, {"name":"getVendasDiariasPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getVendasMensaisPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.jdbc.core.JdbcTemplate"] }, {"name":"getAgregadoConsumoPorInsumo","parameterTypes":["java.time.LocalDate","java.time.LocalDate","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getAgregadoVendasPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate","java.time.LocalDate","java.time.LocalDate"] }, {"name":"getCatalogoInsumoAtivo","parameterTypes":[] }, {"name":"getCatalogoVendavelAtivo","parameterTypes":[] }, {"name":"getConsumoDiarioPorInsumo","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getVendasDiariasPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }, {"name":"getVendasMensaisPorProduto","parameterTypes":["java.time.LocalDate","java.time.LocalDate"] }]
 },
 {
   "name":"com.firebird_data_extractor.www.repositories.AnalyticsRepository$$SpringCGLIB$$0",
