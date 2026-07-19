@@ -291,6 +291,13 @@
   "methods":[{"name":"faturamento","parameterTypes":[] }, {"name":"id","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.dto.FeriadoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"categoria","parameterTypes":[] }, {"name":"data","parameterTypes":[] }, {"name":"nome","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.dto.GarcomDetalhesDTO",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -359,6 +366,20 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"capitalParado","parameterTypes":[] }, {"name":"foraDoPadrao","parameterTypes":[] }, {"name":"poucoUtilizados","parameterTypes":[] }, {"name":"quedaConsumo","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.PontoPrevisaoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"data","parameterTypes":[] }, {"name":"feriado","parameterTypes":[] }, {"name":"limiteInferior","parameterTypes":[] }, {"name":"limiteSuperior","parameterTypes":[] }, {"name":"valor","parameterTypes":[] }]
+},
+{
+  "name":"com.firebird_data_extractor.www.dto.PrevisaoDTO",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"avisoBaixaConfianca","parameterTypes":[] }, {"name":"diasHistorico","parameterTypes":[] }, {"name":"feriadosNoHorizonte","parameterTypes":[] }, {"name":"horizonteDias","parameterTypes":[] }, {"name":"mape","parameterTypes":[] }, {"name":"metodo","parameterTypes":[] }, {"name":"metrica","parameterTypes":[] }, {"name":"pontos","parameterTypes":[] }]
 },
 {
   "name":"com.firebird_data_extractor.www.dto.ProdutoAbandonadoDTO",
