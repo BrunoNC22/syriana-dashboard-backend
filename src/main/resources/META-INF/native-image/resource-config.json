@@ -103,6 +103,8 @@
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/controllers/ProdutosController.class\\E"
   }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/controllers/RelatoriosController.class\\E"
+  }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$ConsumoAgregado.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository$ConsumoDiario.class\\E"
@@ -120,6 +122,10 @@
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/AnalyticsRepository.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/DashboardRepository.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/EstoqueRepository$Granularidade.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/repositories/EstoqueRepository.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/repositories/ForecastRepository.class\\E"
   }, {
@@ -158,6 +164,12 @@
     "pattern":"\\Qcom/firebird_data_extractor/www/services/PrevisaoService$Metrica.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/services/PrevisaoService.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/RelatorioComprasService$Entrada.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/RelatorioComprasService$ResumoInsumo.class\\E"
+  }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/services/RelatorioComprasService.class\\E"
   }, {
     "pattern":"\\Qconfig/application-default.properties\\E"
   }, {
