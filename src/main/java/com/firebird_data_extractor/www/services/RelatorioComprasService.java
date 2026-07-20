@@ -1,5 +1,6 @@
 package com.firebird_data_extractor.www.services;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -93,6 +94,7 @@ public class RelatorioComprasService {
     private final ForecastService forecast;
     private final PrevisaoService previsaoService;
     private final HolidayCalendarService feriados;
+    private final Clock clock;
     private final Map<String, Entrada> cache = new ConcurrentHashMap<>();
 
     public RelatorioComprasService(
@@ -100,8 +102,10 @@ public class RelatorioComprasService {
         EstoqueRepository estoqueRepository,
         ForecastService forecast,
         PrevisaoService previsaoService,
-        HolidayCalendarService feriados
+        HolidayCalendarService feriados,
+        Clock clock
     ) {
+        this.clock = clock;
         this.forecastRepository = forecastRepository;
         this.estoqueRepository = estoqueRepository;
         this.forecast = forecast;
@@ -130,9 +134,11 @@ public class RelatorioComprasService {
      */
     public RelatorioComprasDTO gerar(String horizonteParam) {
         int horizonteDias = parseHorizonte(horizonteParam);
-        LocalDate hoje = LocalDate.now();
+        LocalDate hoje = LocalDate.now(clock);
 
         String chave = horizonteDias + "|" + hoje;
+        // Relógio de parede de propósito: o TTL mede tempo real. Com o relógio
+        // de negócio (que pode estar congelado em dev) a entrada nunca expiraria.
         long agora = System.currentTimeMillis();
         Entrada cached = cache.get(chave);
         if (cached != null && cached.expiraEm() > agora) {

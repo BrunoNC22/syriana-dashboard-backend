@@ -81,6 +81,8 @@
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/\\E"
   }, {
+    "pattern":"\\Qcom/firebird_data_extractor/www/config/ClockConfig.class\\E"
+  }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/config/CorsConfig.class\\E"
   }, {
     "pattern":"\\Qcom/firebird_data_extractor/www/config/DatabaseConfig$ServerConfig.class\\E"

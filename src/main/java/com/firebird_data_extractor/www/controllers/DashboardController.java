@@ -61,6 +61,9 @@ public class DashboardController {
         }
 
         LocalDate limiteInferior = LocalDate.of(2000, 1, 1);
+        // Guarda contra entrada absurda, não data de negócio: usa o relógio de
+        // parede de propósito (ver ClockConfig). O relógio simulado de dev só
+        // apertaria um teto que já é folgado.
         LocalDate limiteSuperior = LocalDate.now().plusYears(1);
 
         if (dataInicio.isBefore(limiteInferior) || dataFim.isAfter(limiteSuperior)) {

@@ -56,6 +56,7 @@ public class GarconsController {
         }
 
         LocalDate limiteInferior = LocalDate.of(2000, 1, 1);
+        // Guarda contra entrada absurda, não data de negócio (ver ClockConfig).
         LocalDate limiteSuperior = LocalDate.now().plusYears(1);
 
         if (dataInicio.isBefore(limiteInferior) || dataFim.isAfter(limiteSuperior)) {

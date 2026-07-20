@@ -1,5 +1,6 @@
 package com.firebird_data_extractor.www.services;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -81,16 +82,18 @@ public class AnalyticsService {
     private static final double ZSCORE_LIMITE = 2.0;
 
     private final AnalyticsRepository repository;
+    private final Clock clock;
 
-    public AnalyticsService(AnalyticsRepository repository) {
+    public AnalyticsService(AnalyticsRepository repository, Clock clock) {
         this.repository = repository;
+        this.clock = clock;
     }
 
     public ProdutosBaixoDesempenhoDTO analisarProdutos(
         LocalDate dataInicio,
         LocalDate dataFim
     ) {
-        LocalDate hoje = LocalDate.now();
+        LocalDate hoje = LocalDate.now(clock);
 
         // Período anterior de mesma duração (comparação "período anterior").
         long dias = ChronoUnit.DAYS.between(dataInicio, dataFim) + 1;
@@ -326,7 +329,7 @@ public class AnalyticsService {
         LocalDate dataInicio,
         LocalDate dataFim
     ) {
-        LocalDate hoje = LocalDate.now();
+        LocalDate hoje = LocalDate.now(clock);
 
         // Período anterior de mesma duração (comparação "período anterior").
         long dias = ChronoUnit.DAYS.between(dataInicio, dataFim) + 1;
