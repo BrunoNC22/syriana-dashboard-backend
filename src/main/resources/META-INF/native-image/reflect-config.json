@@ -155,6 +155,13 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"main","parameterTypes":["java.lang.String[]"] }]
 },
 {
+  "name":"com.firebird_data_extractor.www.config.ClockConfig",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"clock","parameterTypes":[] }]
+},
+{
   "name":"com.firebird_data_extractor.www.config.CorsConfig",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -589,7 +596,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.AnalyticsRepository"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.AnalyticsRepository"] }, {"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.AnalyticsRepository","java.time.Clock"] }]
 },
 {
   "name":"com.firebird_data_extractor.www.services.ForecastService",
@@ -610,14 +617,14 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ForecastRepository","com.firebird_data_extractor.www.services.ForecastService","com.firebird_data_extractor.www.services.HolidayCalendarService"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ForecastRepository","com.firebird_data_extractor.www.services.ForecastService","com.firebird_data_extractor.www.services.HolidayCalendarService"] }, {"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ForecastRepository","com.firebird_data_extractor.www.services.ForecastService","com.firebird_data_extractor.www.services.HolidayCalendarService","java.time.Clock"] }]
 },
 {
   "name":"com.firebird_data_extractor.www.services.RelatorioComprasService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ForecastRepository","com.firebird_data_extractor.www.repositories.EstoqueRepository","com.firebird_data_extractor.www.services.ForecastService","com.firebird_data_extractor.www.services.PrevisaoService","com.firebird_data_extractor.www.services.HolidayCalendarService"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ForecastRepository","com.firebird_data_extractor.www.repositories.EstoqueRepository","com.firebird_data_extractor.www.services.ForecastService","com.firebird_data_extractor.www.services.PrevisaoService","com.firebird_data_extractor.www.services.HolidayCalendarService"] }, {"name":"<init>","parameterTypes":["com.firebird_data_extractor.www.repositories.ForecastRepository","com.firebird_data_extractor.www.repositories.EstoqueRepository","com.firebird_data_extractor.www.services.ForecastService","com.firebird_data_extractor.www.services.PrevisaoService","com.firebird_data_extractor.www.services.HolidayCalendarService","java.time.Clock"] }]
 },
 {
   "name":"com.github.benmanes.caffeine.cache.Caffeine"
@@ -1081,6 +1088,10 @@
 },
 {
   "name":"java.text.ListFormat"
+},
+{
+  "name":"java.time.Clock$FixedClock",
+  "methods":[{"name":"close","parameterTypes":[] }, {"name":"shutdown","parameterTypes":[] }]
 },
 {
   "name":"java.util.AbstractCollection",
